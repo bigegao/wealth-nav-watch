@@ -31,6 +31,15 @@ const PATH_PROBE = '/sourcedb/srfd6_2024/index_1.html';
 const HOME_PROBE = '/';
 const STRICT = process.argv.includes('--strict');
 
+// 诊断脚本是「来查问题的」，绝不能自己把流水线带崩。
+// 任何漏网的未捕获异常都只记录、不退出 —— 崩溃了就拿不到诊断结果了。
+process.on('uncaughtException', (err) => {
+  out(`[未捕获异常，已忽略以保证诊断跑完] ${describeError(err)}`);
+});
+process.on('unhandledRejection', (err) => {
+  out(`[未处理的 Promise 拒绝，已忽略] ${describeError(err)}`);
+});
+
 /** 每个探测的超时（毫秒） */
 const PROBE_TIMEOUT = 12_000;
 
@@ -333,16 +342,17 @@ async function main() {
     }
   }
 
-  // IPv6 单独测：它可能是「默认 fetch 挂掉」的元凶，但要单独试（family 6）
+  // IPv6 只做 TCP 探测，不做 TLS —— Azure runner 的 IPv6 出口是坏的，
+  // 做 TLS 会抛「connect ENETUNREACH」，而且那个错误会变成 unhandled
+  // 'error' event 把进程带崩（2026-11-11 在 Actions 上连着崩了两次）。
+  // 结论用 TCP 探测的结果就够：不通就是不通。
   if (osV6.length) {
     out();
-    out('  IPv6 候选（单独试）：');
+    out('  IPv6 候选（只做 TCP 探测，不做 TLS）：');
     for (const ip of osV6) {
       try {
-        const r = await probePinnedIp(ip, PATH_PROBE, 6);
-        out(
-          `    ${ip}  ${r.ok ? `通 status=${r.status} ${r.bytes}B` : '失败'}  ${r.ms}ms  ${r.note}`,
-        );
+        const r = await probeTcp(ip);
+        out(`    ${ip}  ${r.ok ? 'TCP 通' : 'TCP 不通'}  ${r.ms}ms  ${r.note}`);
       } catch (err) {
         out(`    ${ip}  探测自身出错：${describeError(err)}`);
       }

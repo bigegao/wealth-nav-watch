@@ -405,11 +405,19 @@ async function fetchSource(dir, maxPages) {
   const rows = [];
   let cursor = 1;
   let emptyStreak = 0;
+  let done = 0;
+  const started = Date.now();
   const worker = async () => {
     while (cursor <= maxPages) {
       const page = cursor;
       cursor += 1;
       const html = await fetchPage(dir, page);
+      done += 1;
+      // 跨境抓取要几分钟，日志里得有动静，否则看不出是在跑还是在卡
+      if (done % 20 === 0) {
+        const secs = ((Date.now() - started) / 1000).toFixed(0);
+        console.log(`    ${dir}：已抓 ${done} 页（${secs}s），累计 ${rows.length} 行`);
+      }
       if (html === null) {
         // 404 = 页面不存在 = 翻到底了
         emptyStreak += 1;
@@ -491,9 +499,11 @@ async function main(argv) {
 
   const all = [];
   for (const dir of opts.dirs) {
+    const started = Date.now();
     const rows = await fetchSource(dir, opts.pages);
     const label = SOURCES.find((s) => s.dir === dir)?.label ?? dir;
-    console.log(`  ${dir}（${label}）：${rows.length} 行`);
+    const secs = ((Date.now() - started) / 1000).toFixed(1);
+    console.log(`  ${dir}（${label}）：${rows.length} 行（用时 ${secs}s）`);
     all.push(...rows.map((r) => ({ ...r, source_dir: dir })));
   }
 

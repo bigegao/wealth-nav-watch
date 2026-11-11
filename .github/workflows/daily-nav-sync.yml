@@ -23,6 +23,14 @@ on:
     - cron: '20 12 * * *'
   # 手动补跑（workflow_dispatch 也能用来回补历史缺口）
   workflow_dispatch:
+  # 推到 main 也跑一次 —— 改完脚本想立刻验证时很方便。
+  #
+  # 不会形成循环：workflow 自己推数据用的是 GITHUB_TOKEN，
+  # 而 GitHub 明确「用 GITHUB_TOKEN 触发的事件不会产生新的 workflow run」
+  # （workflow_dispatch / repository_dispatch 除外，本文件没有这两个）。
+  push:
+    branches:
+      - main
 
 permissions:
   contents: write

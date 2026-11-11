@@ -42,6 +42,14 @@ jobs:
       - name: 跑诊断脚本
         run: node scripts/diagnose-network.mjs
 
+      - name: 验证：新抓取脚本在 runner 上能不能用
+        run: |
+          echo "--- 小规模抓取（5 页，验证传输层通不通）---"
+          time node scripts/fetch-boc-nav.mjs --dry-run --dir srfd6_2024 --pages 5
+          echo
+          echo "--- 再抓 30 页，测稳定性 ---"
+          time node scripts/fetch-boc-nav.mjs --dry-run --dir srfd6_2024 --pages 30
+
       - name: 补充：curl 的原始错误（OpenSSL 会说人话，不像 undici 只给「fetch failed」）
         run: |
           echo "--- getent ahosts www.boc.cn ---"

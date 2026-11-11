@@ -130,7 +130,7 @@ async function probeFetch(url, timeout = PROBE_TIMEOUT) {
  *   - lookup 覆盖（钉住 IP，但 SNI 和证书校验仍然按域名走 —— 换成 IP 直连会证书不过）
  *   - 明确的 err.code（ECONNRESET / ETIMEDOUT / ENOTFOUND …）
  */
-function probePinnedIp(ip, path) {
+function probePinnedIp(ip, path, family = 4) {
   return new Promise((resolve) => {
     const started = Date.now();
     const req = https.request(
@@ -150,9 +150,9 @@ function probePinnedIp(ip, path) {
         // ERR_INVALID_IP_ADDRESS: undefined。
         lookup: (_hostname, options, callback) => {
           if (options && options.all) {
-            callback(null, [{ address: ip, family: 4 }]);
+            callback(null, [{ address: ip, family }]);
           } else {
-            callback(null, ip, 4);
+            callback(null, ip, family);
           }
         },
         timeout: PROBE_TIMEOUT,
@@ -180,6 +180,9 @@ function probePinnedIp(ip, path) {
     req.on('error', (err) => {
       resolve({ ok: false, status: 0, bytes: 0, ms: Date.now() - started, note: describeError(err) });
     });
+    // TLS socket 可能在请求结束后才抛错 —— 那时没人监听就会变成
+    // unhandled 'error' event 直接把进程带崩（2026-11-11 在 Actions 上就是这么挂的）。
+    req.on('socket', (socket) => socket.on('error', () => {}));
     req.end();
   });
 }
@@ -245,12 +248,36 @@ async function main() {
 
   hr('2. DNS：操作系统解析');
   let osIps = [];
+  let osV6 = [];
   try {
     const res = await dns.lookup(HOST, { all: true });
-    osIps = res.map((r) => r.address);
-    out(`getaddrinfo(${HOST}) -> ${osIps.join(', ')}`);
+    osIps = res.filter((r) => r.family === 4).map((r) => r.address);
+    osV6 = res.filter((r) => r.family === 6).map((r) => r.address);
+    out(`getaddrinfo(${HOST}) -> IPv4: ${osIps.join(', ') || '(无)'}`);
+    out(`                       IPv6: ${osV6.join(', ') || '(无)'}`);
+    if (osV6.length) {
+      out();
+      out('⚠ 这台机器解析到了 IPv6 地址。');
+      out('  Azure 托管 runner 通常**没有可用的 IPv6 出口** ——');
+      out('  undici 取到 IPv6 后直接连会拿到 EINVAL/ECONNREFUSED，');
+      out('  对外只表现为一句没有信息量的「TypeError: fetch failed」。');
+      out('  → 抓取脚本必须**显式只走 IPv4**。');
+    }
   } catch (err) {
     out(`getaddrinfo(${HOST}) -> 失败：${describeError(err)}`);
+  }
+
+  hr('2b. 对照：默认 fetch 能不能取到 sourcedb（这一步最关键）');
+  {
+    const r = await probeFetch(`https://${HOST}${PATH_PROBE}`, 30_000);
+    out(
+      `  默认 fetch  ${r.ok ? `通 status=${r.status} ${r.bytes}B` : '失败'}  ${r.ms}ms  ${r.note}`,
+    );
+    out(
+      r.ok
+        ? '  → 默认 fetch 可用，问题在别处（keep-alive 复用 / 瞬时抖动）。'
+        : '  → 默认 fetch 不可用 → 抓取脚本必须钉住 IPv4（或换出口）。',
+    );
   }
 
   hr('3. DNS：带 ECS 的多区域解析（看智能解析给了哪些节点）');
@@ -289,15 +316,37 @@ async function main() {
   hr('4. 逐个候选 IP 探测（钉 IP、SNI 仍用域名）');
   const ipResults = [];
   for (const [ip, sources] of candidates) {
-    const tcp = await probeTcp(ip);
-    const http = await probePinnedIp(ip, PATH_PROBE);
-    ipResults.push({ ip, sources, tcp, http });
     const src = sources.length ? `（${sources.join('、')}）` : '';
-    out(`  ${ip}${src}`);
-    out(`    TCP    ${tcp.ok ? '通' : '不通'}  ${tcp.ms}ms  ${tcp.note}`);
-    out(
-      `    HTTPS  ${http.ok ? `通 status=${http.status} ${http.bytes}B` : '失败'}  ${http.ms}ms  ${http.note}`,
-    );
+    try {
+      const tcp = await probeTcp(ip);
+      const http = await probePinnedIp(ip, PATH_PROBE);
+      ipResults.push({ ip, sources, tcp, http });
+      out(`  ${ip}${src}`);
+      out(`    TCP    ${tcp.ok ? '通' : '不通'}  ${tcp.ms}ms  ${tcp.note}`);
+      out(
+        `    HTTPS  ${http.ok ? `通 status=${http.status} ${http.bytes}B` : '失败'}  ${http.ms}ms  ${http.note}`,
+      );
+    } catch (err) {
+      // 单个候选探测炸了不能带崩整个诊断
+      out(`  ${ip}${src}`);
+      out(`    探测自身出错：${describeError(err)}`);
+    }
+  }
+
+  // IPv6 单独测：它可能是「默认 fetch 挂掉」的元凶，但要单独试（family 6）
+  if (osV6.length) {
+    out();
+    out('  IPv6 候选（单独试）：');
+    for (const ip of osV6) {
+      try {
+        const r = await probePinnedIp(ip, PATH_PROBE, 6);
+        out(
+          `    ${ip}  ${r.ok ? `通 status=${r.status} ${r.bytes}B` : '失败'}  ${r.ms}ms  ${r.note}`,
+        );
+      } catch (err) {
+        out(`    ${ip}  探测自身出错：${describeError(err)}`);
+      }
+    }
   }
 
   hr('5. 对照站点（同一台机器、同一时刻）');

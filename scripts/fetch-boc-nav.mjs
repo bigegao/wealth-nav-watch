@@ -42,12 +42,17 @@
 import { readFile, readdir, writeFile, mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import dns from 'node:dns/promises';
+import https from 'node:https';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..');
 const DATA_DIR = path.join(REPO, 'data');
 
 const BASE = 'https://www.boc.cn/sourcedb';
+
+/** 站点域名（钉 IP 时 SNI 和证书校验仍然按域名走） */
+const HOST = 'www.boc.cn';
 
 /** 来源目录 → 说明（写进 CSV 的 source_dir 列） */
 const SOURCES = [
@@ -59,11 +64,19 @@ const SOURCES = [
 /** 每个源最多翻多少页（留余量，实际最后一页之后就是空页） */
 const MAX_PAGES = 220;
 
-/** 并发抓取数 */
-const CONCURRENCY = 6;
+/**
+ * 并发抓取数。
+ *
+ * 跨境实测单页 1.6~3 秒（TLS 握手 + 往返），520 页 ÷ 4 并发 ≈ 5.5 分钟。
+ * 调高不是不行，只是没必要 —— 而且同一主机上同时开太多新连接容易触发限流。
+ */
+const CONCURRENCY = 4;
 
-/** 单页重试次数 */
-const RETRIES = 3;
+/** 单页重试轮数（每轮会把候选 IP 全试一遍） */
+const RETRIES = 4;
+
+/** 单次请求超时（毫秒）—— 跨境抖动大，给足余量 */
+const REQUEST_TIMEOUT = 30_000;
 
 /**
  * CSV 的列定义。
@@ -227,33 +240,155 @@ function parseBocPage(html) {
 
 // ---------------------------------------------------------------- 抓取
 
+/**
+ * 把一条错误链压成人类能读的字符串。
+ *
+ * 为什么要自己压：undici 的 `fetch` 失败时只给一句
+ * `TypeError: fetch failed`，真实原因（ECONNRESET / ENOTFOUND / EINVAL…）
+ * 藏在 `err.cause` 里。2026-11-11 第一次在 GitHub Actions 上跑就栽在这 ——
+ * 日志里只有「fetch failed」，完全看不出是 IPv6 地址不可达。
+ */
+function describeError(err) {
+  const parts = [];
+  let e = err;
+  let depth = 0;
+  while (e && depth < 8) {
+    const code = e.code ? `[${e.code}]` : '';
+    parts.push(`${e.name}${code}: ${e.message}`);
+    e = e.cause;
+    depth += 1;
+  }
+  return parts.join('  <-  ');
+}
+
+/**
+ * 解析候选 IP —— **只取 IPv4**。
+ *
+ * 关键：中行是 geo-DNS（按客户端位置智能解析），GitHub 托管 runner 在 Azure，
+ * 实测 `getaddrinfo(www.boc.cn)` 会返回 `36.35.8.18` **和 IPv6 的
+ * `2408:862a:c11:200::46`**。Azure runner 没有可用的 IPv6 出口，
+ * 拿到 IPv6 就直接 `connect EINVAL` —— 对外只表现成「fetch failed」。
+ * 所以这里显式把 IPv6 滤掉，只用 IPv4。
+ */
+async function resolveIPv4() {
+  let list = [];
+  try {
+    const res = await dns.lookup(HOST, { all: true });
+    list = res.filter((r) => r.family === 4 || r.family === 'IPv4').map((r) => r.address);
+  } catch (err) {
+    throw new Error(`解析 ${HOST} 失败：${describeError(err)}`);
+  }
+  if (!list.length) {
+    throw new Error(`解析 ${HOST} 没有得到 IPv4 地址（只有 IPv6？）`);
+  }
+  return [...new Set(list)];
+}
+
+/**
+ * 用钉定的 IP 发一次 HTTPS 请求。
+ *
+ * 为什么不用 `fetch`：fetch 不支持指定解析结果，无法绕开「DNS 给的 IPv6 不可用」。
+ * `node:https` 的 `lookup` 覆盖可以钉住 IPv4，同时 `servername` 仍传域名 ——
+ * 证书按域名校验、SNI 也正确，改成直接连 IP 会证书不过。
+ *
+ * `agent: false` = 不复用连接。每次新建 TLS 连接，慢一点但不会踩
+ * 「服务端提前关掉 keep-alive 连接、客户端拿到半截响应」那个竞态。
+ */
+function httpGetPinned(url, ip, timeoutMs) {
+  return new Promise((resolve, reject) => {
+    const target = new URL(url);
+    const req = https.request(
+      {
+        hostname: HOST,
+        path: target.pathname + target.search,
+        servername: HOST,
+        method: 'GET',
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; wealth-nav-watch/1.0)',
+          Accept: 'text/html,application/xhtml+xml',
+          Connection: 'close',
+        },
+        agent: false,
+        // Node 20+ 默认 autoSelectFamily:true，会以 { all: true } 调用 lookup，
+        // 这时回调要收数组而不是 (address, family)。
+        lookup: (_hostname, options, callback) => {
+          if (options && options.all) callback(null, [{ address: ip, family: 4 }]);
+          else callback(null, ip, 4);
+        },
+        timeout: timeoutMs,
+      },
+      (res) => {
+        const chunks = [];
+        res.on('data', (c) => chunks.push(c));
+        res.on('end', () => resolve({ status: res.statusCode ?? 0, body: Buffer.concat(chunks) }));
+        res.on('error', reject);
+      },
+    );
+    req.on('timeout', () => {
+      req.destroy(Object.assign(new Error('socket 超时'), { code: 'ETIMEDOUT' }));
+    });
+    req.on('error', reject);
+    // TLS socket 可能在请求结束后才抛错 —— 那时没人监听就会变成
+    // unhandled 'error' event 直接把进程带崩。
+    req.on('socket', (socket) => socket.on('error', () => {}));
+    req.end();
+  });
+}
+
+/** 页面字节 → 文本（三个源实测都是 UTF-8，万一变了就退回 gb18030） */
+function decodeHtml(buf) {
+  let html = new TextDecoder('utf-8', { fatal: false }).decode(buf);
+  if (html.includes('�')) {
+    html = new TextDecoder('gb18030', { fatal: false }).decode(buf);
+  }
+  return html;
+}
+
+/**
+ * 抓一页。
+ *
+ * 返回：HTML 文本；页码不存在（404）时返回 null（表示「到底了」）。
+ * 失败必须抛错 —— 宁可整个任务失败，也不能拿半截数据去算增量。
+ */
 async function fetchPage(dir, page) {
   const url = `${BASE}/${dir}/index_${page}.html`;
-  let lastErr = null;
-  for (let attempt = 0; attempt < RETRIES; attempt += 1) {
-    try {
-      const res = await fetch(url, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; wealth-nav-watch/1.0)' },
-        signal: AbortSignal.timeout(20_000),
-      });
-      if (!res.ok) {
-        lastErr = new Error(`HTTP ${res.status}`);
-        if (res.status < 500 && res.status !== 429) break; // 4xx 重试没有意义
-      } else {
-        const buf = Buffer.from(await res.arrayBuffer());
-        // 三个源实测都是 UTF-8；万一变了就退回 gb18030（不静默出乱码）
-        let html = new TextDecoder('utf-8', { fatal: false }).decode(buf);
-        if (html.includes('�')) {
-          html = new TextDecoder('gb18030', { fatal: false }).decode(buf);
+  const attempts = [];
+  let ips = await resolveIPv4();
+
+  for (let round = 0; round < RETRIES; round += 1) {
+    for (const ip of ips) {
+      const started = Date.now();
+      try {
+        const { status, body } = await httpGetPinned(url, ip, REQUEST_TIMEOUT);
+        const ms = Date.now() - started;
+        if (status === 404) {
+          // 这一页不存在 = 翻到底了，不是「抓取失败」
+          return null;
         }
-        return html;
+        if (status >= 200 && status < 300) {
+          return decodeHtml(body);
+        }
+        attempts.push(`第${round + 1}轮 ${ip} → HTTP ${status}（${ms}ms）`);
+        if (status < 500 && status !== 429) {
+          throw new Error(`HTTP ${status}（4xx，重试没有意义）`);
+        }
+      } catch (err) {
+        attempts.push(`第${round + 1}轮 ${ip} → ${describeError(err)}（${Date.now() - started}ms）`);
       }
-    } catch (err) {
-      lastErr = err;
     }
-    if (attempt + 1 < RETRIES) await sleep(800 * (attempt + 1));
+    if (round + 1 < RETRIES) {
+      await sleep(1000 * (round + 1) + Math.floor(Math.random() * 500));
+      // 重新解析：中行 DNS TTL 只有 300 秒且会轮换，可能换到别的节点
+      try {
+        ips = await resolveIPv4();
+      } catch {
+        /* 沿用上一轮的候选 */
+      }
+    }
   }
-  throw new Error(`抓取 ${url} 连续 ${RETRIES} 次失败：${lastErr}`);
+  throw new Error(
+    `抓取 ${url} 失败（${RETRIES} 轮 × ${ips.length} 个候选 IP）：\n      - ${attempts.join('\n      - ')}`,
+  );
 }
 
 function sleep(ms) {
@@ -275,6 +410,12 @@ async function fetchSource(dir, maxPages) {
       const page = cursor;
       cursor += 1;
       const html = await fetchPage(dir, page);
+      if (html === null) {
+        // 404 = 页面不存在 = 翻到底了
+        emptyStreak += 1;
+        if (emptyStreak >= 2) return;
+        continue;
+      }
       const pageRows = parseBocPage(html);
       if (pageRows.length === 0) {
         emptyStreak += 1;

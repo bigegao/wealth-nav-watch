@@ -1,0 +1,93 @@
+name: 中行净值每日增量
+
+# 每天抓一次中国银行「当日代销理财产品净值」静态页，
+# **只把新增的 (来源, 产品代码, 净值日期) 组合**存成 CSV 推回仓库。
+#
+# 文件名 = 运行日期（北京时间）：`data/YYYY-MM-DD.csv`
+# 没有新增数据的那天**不产生文件**（仓库里不会出现只有表头的空 CSV）。
+#
+# 为什么要自己攒：
+#   中行这个归档站**每只产品只保留最新的一条记录** ——
+#   实测 196 页里 9,798 行、9,363 个产品代码，拥有 ≥2 个不同净值日期的产品 = **0 只**。
+#   所以历史批次一旦被新披露覆盖就永久消失，想攒历史**只能每天存一条**。
+#
+# 增量怎么判：
+#   仓库里已有的 `(source_dir, code, nav_date)` 组合不再重复记。
+#   中途停跑几天 → 那几天的批次重新出现时会被自动补上（还没被覆盖的话）。
+
+on:
+  schedule:
+    # UTC 12:20 = 北京时间 20:20。
+    # 中行按**估值日**披露：周五估值的产品净值下周一才出现在页面上，
+    # 所以抓取放在盘后，不是早上。
+    - cron: '20 12 * * *'
+  # 手动补跑（workflow_dispatch 也能用来回补历史缺口）
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+# 同一时间只跑一个 —— 上一次没跑完就排队，不打断。
+# 打断会留下半截数据（写入是幂等的，但没必要）。
+concurrency:
+  group: boc-nav-daily
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: 抓取中行净值增量并提交
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      # 脚本零第三方依赖（只用 Node 自带的 fetch），不用 npm ci
+      - name: 抓取并算增量
+        run: node scripts/fetch-boc-nav.mjs
+
+      - name: 提交当日数据
+        env:
+          # 用 GITHUB_TOKEN 推送的 commit **不会**再触发一轮 workflow，
+          # 所以不会出现「提交 → 触发 → 提交」的循环。
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/
+          if git diff --cached --quiet; then
+            echo "今天没有新增净值，仓库保持不变。"
+            exit 0
+          fi
+
+          run_date="$(TZ=Asia/Shanghai date +%F)"
+          git commit -m "data: ${run_date} 中行净值增量"
+
+          # 认证走 `-c`：**不落盘**到 .git/config。
+          # （checkout 用了 persist-credentials: false，所以这里要自己带上凭据）
+          auth_header="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+
+          for i in 1 2 3; do
+            if git -c "http.https://github.com/.extraheader=${auth_header}" push origin HEAD:main; then
+              echo "已推送。"
+              exit 0
+            fi
+            echo "推送失败（第 ${i} 次），拉取后重试…"
+            if ! git -c "http.https://github.com/.extraheader=${auth_header}" pull --rebase origin main; then
+              git rebase --abort || true
+              echo "::error::拉取失败，放弃重试。"
+              exit 1
+            fi
+            sleep $((i * 5))
+          done
+          echo "::error::推送失败，请手动检查。"
+          exit 1

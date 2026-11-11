@@ -4,20 +4,21 @@ name: 网络诊断
 #
 # 为什么需要它：
 #   中行的 www.boc.cn 用**按客户端位置智能解析**（geo-DNS），
-#   实测不同来源解析到不同节点（上海 218.23.97.18 / 美国 36.102.224.177 / 日本 116.136.32.177），
-#   各节点对境外出口的可达性不一样。
+#   实测不同来源解析到不同节点（上海 218.23.97.18 / 美国 116.136.32.177 / 日本 112.28.152.18），
+#   各节点对境外出口的可达性和延迟差别很大（实测 0.8 秒 ~ 13 秒）。
 #   在 Azure runner（默认美国）上抓取失败时，靠猜是没用的，必须实测。
 #
-# 用 `on: push` 而不是 `workflow_dispatch`：
-#   workflow_dispatch 要求 workflow 文件在**默认分支**上才出现在 UI 里；
-#   push 事件用「被推送的那个提交里的 workflow 文件」→ 可以直接在特性分支上跑。
+# 2026-11-11 那次失败的真实原因就是它查出来的：
+#   undici 的 happy-eyeballs 对每个地址只给 250ms，跨境 TLS 握手要 3 个 RTT，
+#   加上 IPv6 在 runner 上是黑洞（ENETUNREACH）→ 间歇性 AggregateError/ETIMEDOUT，
+#   对外只显示一句「TypeError: fetch failed」。
+#
+# 手动触发（Actions → 网络诊断 → Run workflow）。
+# 以后再遇到抓不动，先跑这个，别猜。
 #
 # 退出码恒为 0：诊断工具不该把流水线带崩，结果看日志。
 
 on:
-  push:
-    branches:
-      - 'feat/network-diagnose'
   workflow_dispatch:
 
 permissions:

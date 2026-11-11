@@ -37,7 +37,8 @@ jobs:
   sync:
     name: 抓取中行净值增量并提交
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    # 跨境抓 520 页，实测约 5 分钟；留足余量给跨境抖动和重试
+    timeout-minutes: 45
     steps:
       - name: 检出代码
         uses: actions/checkout@v7
@@ -50,8 +51,24 @@ jobs:
           node-version: 22
 
       # 脚本零第三方依赖（只用 Node 自带的 fetch），不用 npm ci
+      #
+      # 整步重试 3 次：抓取是幂等的（写不写文件都算成功），
+      # 而跨境链路本来就会间歇性抖动 —— 脚本内部已经有多候选 IP + 4 轮重试，
+      # 这一层是给「整段都碰上坏节点」兜底。
       - name: 抓取并算增量
-        run: node scripts/fetch-boc-nav.mjs
+        run: |
+          set -uo pipefail
+          for i in 1 2 3; do
+            echo "=== 抓取尝试 ${i}/3 ==="
+            if node scripts/fetch-boc-nav.mjs; then
+              echo "抓取成功。"
+              exit 0
+            fi
+            echo "第 ${i} 次抓取失败，30 秒后重试…"
+            sleep 30
+          done
+          echo "::error::连续 3 次抓取失败。"
+          exit 1
 
       - name: 提交当日数据
         env:

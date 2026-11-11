@@ -114,6 +114,7 @@ awk -F, 'NR==1 || $9=="srfd6_2024"' data/2026-11-11.csv
 node scripts/fetch-boc-nav.mjs                # 抓全部源，算增量，写 data/<今天>.csv
 node scripts/fetch-boc-nav.mjs --dry-run      # 只算不写，看看这次会新增什么
 node scripts/fetch-boc-nav.mjs --dir srfd6_2024 --pages 20   # 只抓理财的前 20 页
+node scripts/diagnose-network.mjs             # 网络诊断（抓不动的时候先跑这个）
 ```
 
 参数：
@@ -129,13 +130,57 @@ node scripts/fetch-boc-nav.mjs --dir srfd6_2024 --pages 20   # 只抓理财的�
 
 Actions → **中行净值每日增量** → Run workflow。
 
+### 排查：抓不动的时候
+
+```bash
+node scripts/diagnose-network.mjs
+```
+
+它会打印：出口 IP、DNS 解析结果（操作系统 + 多个带 ECS 的区域解析）、
+**逐个候选 IP 钉住探测**（SNI 仍用域名）、对照站点（百度 / 中行首页 / 中行 sourcedb），
+以及 Node fetch 的完整错误链。
+
+Actions 上对应「网络诊断」工作流（手动触发）。
+
+---
+
+## 为什么抓取不用 `fetch`
+
+2026-11-11 第一次在 GitHub Actions 上跑就挂了，日志里只有一句
+`TypeError: fetch failed`，毫无信息量。查下来的原因是**两件事叠在一起**：
+
+1. **IPv6 在 runner 上是黑洞。**
+   中行是 geo-DNS，Azure runner 的 `getaddrinfo(www.boc.cn)` 会同时返回
+   IPv4 和 IPv6（如 `2409:8731:21f:30:11e::11e`），而 Azure 托管 runner
+   没有可用的 IPv6 出口 → `connect ENETUNREACH`。
+
+2. **undici 的 happy-eyeballs 给每个地址只 250ms。**
+   跨境 TLS 握手要 3 个 RTT（约 450~750ms），250ms 根本不够 →
+   间歇性 `AggregateError[ETIMEDOUT]`，对外只显示成 `fetch failed`。
+
+同一个 URL 连续两次请求，一次成功一次失败 —— 所以这是**概率性失败**，
+不是某个节点永久不可用。实测各节点延迟差异也很大：0.8 秒 ~ 13 秒。
+
+所以脚本改成：
+
+- 用 `node:https` 配 `lookup` 覆盖**钉住 IPv4**，`servername` 仍传域名
+  （SNI 与证书校验照常，直接连 IP 会证书不过）；
+- `agent: false`，每次新建连接，避开服务端提前关 keep-alive 的竞态；
+- 一页失败就把**所有候选 IP 轮一遍**，每轮之间重新解析 DNS
+  （中行 DNS TTL 只有 300 秒且会轮换节点）；
+- 错误链（`err.cause`）完整打印，不再只给一句 `fetch failed`。
+
+改完在 Azure runner 上实测：30 页 16.8 秒，零失败零重试。
+
 ---
 
 ## 目录
 
 ```
 .github/workflows/daily-nav-sync.yml   每日 workflow
+.github/workflows/diagnose-network.yml  网络诊断（手动触发）
 scripts/fetch-boc-nav.mjs               抓取 + 算增量 + 写 CSV（零依赖）
+scripts/diagnose-network.mjs            网络诊断脚本
 data/                                  每日增量数据
 samples/                               字段样例（不参与增量计算）
 ```

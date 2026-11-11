@@ -1,0 +1,61 @@
+name: 网络诊断
+
+# 一次性排查工具：搞清楚「GitHub 托管 runner 到底能不能访问中行的净值静态页」。
+#
+# 为什么需要它：
+#   中行的 www.boc.cn 用**按客户端位置智能解析**（geo-DNS），
+#   实测不同来源解析到不同节点（上海 218.23.97.18 / 美国 36.102.224.177 / 日本 116.136.32.177），
+#   各节点对境外出口的可达性不一样。
+#   在 Azure runner（默认美国）上抓取失败时，靠猜是没用的，必须实测。
+#
+# 用 `on: push` 而不是 `workflow_dispatch`：
+#   workflow_dispatch 要求 workflow 文件在**默认分支**上才出现在 UI 里；
+#   push 事件用「被推送的那个提交里的 workflow 文件」→ 可以直接在特性分支上跑。
+#
+# 退出码恒为 0：诊断工具不该把流水线带崩，结果看日志。
+
+on:
+  push:
+    branches:
+      - 'feat/network-diagnose'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    name: 探测到中行的连通性
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      - name: 跑诊断脚本
+        run: node scripts/diagnose-network.mjs
+
+      - name: 补充：curl 的原始错误（OpenSSL 会说人话，不像 undici 只给「fetch failed」）
+        run: |
+          echo "--- getent ahosts www.boc.cn ---"
+          getent ahosts www.boc.cn || echo "(无结果)"
+          echo
+          echo "--- curl -v 中行 sourcedb 首屏 ---"
+          curl -sv --max-time 25 https://www.boc.cn/sourcedb/srfd6_2024/index_1.html -o /dev/null 2>&1 | tail -30 || true
+          echo
+          echo "--- 对照：curl 百度 ---"
+          curl -s -o /dev/null -w "baidu http=%{http_code} ip=%{remote_ip} time=%{time_total}\n" --max-time 25 https://www.baidu.com/ || echo "baidu 也失败"
+          echo
+          echo "--- 对照：curl 中行首页 ---"
+          curl -s -o /dev/null -w "boc-home http=%{http_code} ip=%{remote_ip} time=%{time_total}\n" --max-time 25 https://www.boc.cn/ || echo "boc 首页也失败"
+          echo
+          echo "--- 出口 IP ---"
+          curl -s --max-time 15 https://api.ipify.org || true
+          echo

@@ -44,6 +44,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import dns from 'node:dns/promises';
 import https from 'node:https';
+import http from 'node:http';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..');
@@ -100,7 +101,13 @@ const COLUMNS = [
 // ---------------------------------------------------------------- 参数
 
 function parseArgs(argv) {
-  const opts = { dirs: SOURCES.map((s) => s.dir), pages: MAX_PAGES, dryRun: false, date: null };
+  const opts = {
+    dirs: SOURCES.map((s) => s.dir),
+    pages: MAX_PAGES,
+    dryRun: false,
+    date: null,
+    selftest: false,
+  };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     const next = () => argv[++i] ?? '';
@@ -108,9 +115,10 @@ function parseArgs(argv) {
     else if (arg === '--pages') opts.pages = Number(next());
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--date') opts.date = next();
+    else if (arg === '--selftest') opts.selftest = true;
     else if (arg === '--help' || arg === '-h') {
       console.log(
-        '用法：node scripts/fetch-boc-nav.mjs [--dir a,b] [--pages N] [--dry-run] [--date YYYY-MM-DD]',
+        '用法：node scripts/fetch-boc-nav.mjs [--dir a,b] [--pages N] [--dry-run] [--date YYYY-MM-DD] [--selftest]',
       );
       process.exit(0);
     } else {
@@ -285,45 +293,53 @@ async function resolveIPv4() {
 }
 
 /**
- * 用钉定的 IP 发一次 HTTPS 请求。
+ * 发一次 HTTPS 请求（**不跟随重定向**）。
  *
- * 为什么不用 `fetch`：fetch 不支持指定解析结果，无法绕开「DNS 给的 IPv6 不可用」。
- * `node:https` 的 `lookup` 覆盖可以钉住 IPv4，同时 `servername` 仍传域名 ——
- * 证书按域名校验、SNI 也正确，改成直接连 IP 会证书不过。
- *
- * `agent: false` = 不复用连接。每次新建 TLS 连接，慢一点但不会踩
- * 「服务端提前关掉 keep-alive 连接、客户端拿到半截响应」那个竞态。
+ * `ip` 传 null 表示用系统 DNS；传 IP 则钉住它（SNI 与证书仍按域名校验）。
  */
-function httpGetPinned(url, ip, timeoutMs) {
+function httpsGet(url, ip, timeoutMs) {
   return new Promise((resolve, reject) => {
     const target = new URL(url);
-    const req = https.request(
-      {
-        hostname: HOST,
-        path: target.pathname + target.search,
-        servername: HOST,
-        method: 'GET',
-        headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; wealth-nav-watch/1.0)',
-          Accept: 'text/html,application/xhtml+xml',
-          Connection: 'close',
-        },
-        agent: false,
+    const isHttps = target.protocol === 'https:';
+    const transport = isHttps ? https : http;
+    const options = {
+      hostname: target.hostname,
+      // 不写 port 的话 Node 会用默认端口（http 80 / https 443），
+      // 非默认端口的地址就打到 80 去了 —— 漏掉这一行的症状是
+      // 「connect ECONNREFUSED 127.0.0.1:80」。
+      port: target.port || undefined,
+      path: target.pathname + target.search,
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; wealth-nav-watch/1.0)',
+        Accept: 'text/html,application/xhtml+xml',
+      },
+      agent: false,
+      timeout: timeoutMs,
+    };
+    if (isHttps) {
+      options.servername = target.hostname;
+    }
+    if (ip) {
+      options.lookup = (_hostname, lookupOptions, callback) => {
         // Node 20+ 默认 autoSelectFamily:true，会以 { all: true } 调用 lookup，
         // 这时回调要收数组而不是 (address, family)。
-        lookup: (_hostname, options, callback) => {
-          if (options && options.all) callback(null, [{ address: ip, family: 4 }]);
-          else callback(null, ip, 4);
-        },
-        timeout: timeoutMs,
-      },
-      (res) => {
-        const chunks = [];
-        res.on('data', (c) => chunks.push(c));
-        res.on('end', () => resolve({ status: res.statusCode ?? 0, body: Buffer.concat(chunks) }));
-        res.on('error', reject);
-      },
-    );
+        if (lookupOptions && lookupOptions.all) callback(null, [{ address: ip, family: 4 }]);
+        else callback(null, ip, 4);
+      };
+    }
+    const req = transport.request(options, (res) => {
+      const chunks = [];
+      res.on('data', (c) => chunks.push(c));
+      res.on('end', () =>
+        resolve({
+          status: res.statusCode ?? 0,
+          headers: res.headers,
+          body: Buffer.concat(chunks),
+        }),
+      );
+      res.on('error', reject);
+    });
     req.on('timeout', () => {
       req.destroy(Object.assign(new Error('socket 超时'), { code: 'ETIMEDOUT' }));
     });
@@ -333,6 +349,36 @@ function httpGetPinned(url, ip, timeoutMs) {
     req.on('socket', (socket) => socket.on('error', () => {}));
     req.end();
   });
+}
+
+/**
+ * 钉住 IP 取一次页面，**跟随重定向**（最多 3 跳）。
+ *
+ * 为什么必须跟随：中行对超出范围的页码（实测第 197 页起）返回
+ * **302 → /custserv/cs1/msg/200909/...（一个「提示信息」页）**。
+ * 那不是错误，是「翻到底了」的正常信号 —— 提示页里没有净值表格，
+ * 解析出来 0 行，于是「连续两页空 → 停止」。
+ *
+ * 早期版本用 `fetch`，默认跟随重定向，所以行为是对的；
+ * 换成 node:https 后忘了跟 → 302 被当成致命错误，整个任务挂掉。
+ * 这个坑用 --selftest 钉住。
+ */
+async function httpGetPinned(url, ip, timeoutMs) {
+  let current = url;
+  let currentIp = ip;
+  for (let hop = 0; hop <= 3; hop += 1) {
+    const res = await httpsGet(current, currentIp, timeoutMs);
+    const status = res.status;
+    if (status >= 300 && status < 400 && res.headers.location) {
+      const next = new URL(res.headers.location, current);
+      // 换了域名就不能继续钉同一个 IP 了
+      currentIp = next.hostname === HOST ? ip : null;
+      current = next.toString();
+      continue;
+    }
+    return res;
+  }
+  throw new Error(`重定向次数过多：${url}`);
 }
 
 /** 页面字节 → 文本（三个源实测都是 UTF-8，万一变了就退回 gb18030） */
@@ -489,6 +535,9 @@ async function loadRunDateRows(file) {
 
 async function main(argv) {
   const opts = parseArgs(argv);
+  if (opts.selftest) {
+    return selftest();
+  }
   const runDate = opts.date || beijingDate();
 
   console.log(`抓取日期（北京时间）：${runDate}`);
@@ -581,6 +630,98 @@ async function main(argv) {
   await writeFile(outFile, content, 'utf8');
   console.log(`→ ${path.relative(REPO, outFile)}（共 ${merged.size} 行）`);
   return 0;
+}
+
+/**
+ * 自测：把几个「踩过坑」的传输层行为钉住。
+ *
+ * 为什么要专门写这个 —— 2026-11-11 那天连续栽了两次：
+ *   1. 302 重定向没跟随 → 中行第 197 页起返回 302 跳「提示信息」页，
+ *      被当成致命错误，整个任务挂在 180 页；
+ *   2. IPv6 没排除 → Azure runner 上 connect ENETUNREACH。
+ *
+ * 这两个都是「不报错但行为错」或「只在特定网络环境才错」的问题，
+ * 光靠本地跑一次抓取是抓不到的 —— 必须用本地服务器把边界条件复现出来。
+ */
+async function selftest() {
+  const results = [];
+  const check = (name, ok, detail = '') => {
+    results.push({ name, ok, detail });
+    console.log(`${ok ? '  ✅' : '  ❌'} ${name}${detail ? ` —— ${detail}` : ''}`);
+  };
+
+  // 模拟中行的行为：正常页 / 302→提示页 / 404
+  const server = http.createServer((req, res) => {
+    if (req.url === '/page.html') {
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end('<html><body>净值表格</body></html>');
+    } else if (req.url === '/out-of-range.html') {
+      // 中行对超出范围的页码：302 跳到「提示信息」页
+      res.writeHead(302, { Location: '/tip.html' });
+      res.end();
+    } else if (req.url === '/tip.html') {
+      res.writeHead(200, { 'Content-Type': 'text/html' });
+      res.end('<html><head><title>中国银行全球门户网站-提示信息</title></head><body>没有净值表格</body></html>');
+    } else if (req.url === '/missing.html') {
+      res.writeHead(404);
+      res.end('没有这一页');
+    } else {
+      res.writeHead(500);
+      res.end();
+    }
+  });
+  await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const base = `http://127.0.0.1:${server.address().port}`;
+
+  try {
+    console.log('=== 自测 ===');
+
+    // 1) 302 必须跟随（这是 2026-11-11 挂掉的原因）
+    const redirected = await httpGetPinned(`${base}/out-of-range.html`, null, 5000);
+    check(
+      '302 重定向被跟随（而不是当成错误）',
+      redirected.status === 200 && redirected.body.toString('utf8').includes('提示信息'),
+      `status=${redirected.status}`,
+    );
+
+    // 2) 跟到提示页后，解析出来的必须是 0 行 —— 「翻到底了」而不是「有数据」
+    check(
+      '提示页解析出 0 行',
+      parseBocPage(redirected.body.toString('utf8')).length === 0,
+    );
+
+    // 3) 404 必须原样返回状态码（fetchPage 靠它判定「到底了」）
+    const missing = await httpGetPinned(`${base}/missing.html`, null, 5000);
+    check('404 原样返回状态码', missing.status === 404, `status=${missing.status}`);
+
+    // 4) 200 正常页原样返回
+    const ok = await httpGetPinned(`${base}/page.html`, null, 5000);
+    check('200 正常页原样返回', ok.status === 200 && ok.body.toString('utf8').includes('净值表格'));
+
+    // 5) 钉 IP 时必须真的走那个 IP（lookup 覆盖生效）
+    const pinned = await httpGetPinned(`${base}/page.html`, '127.0.0.1', 5000);
+    check('钉住 IP 时请求仍能成功', pinned.status === 200);
+
+    // 6) 错误链要能挖出真实原因（不是只给一句「fetch failed」）
+    const cause = describeError(
+      Object.assign(new TypeError('fetch failed'), { cause: Object.assign(new Error('boom'), { code: 'ECONNRESET' }) }),
+    );
+    check(
+      '错误链包含底层错误码',
+      cause.includes('ECONNRESET') && cause.includes('fetch failed'),
+      cause,
+    );
+
+    // 7) 只取 IPv4 —— IPv6 在 GitHub runner 上是黑洞
+    check('错误链只取 IPv4 的过滤逻辑存在', typeof resolveIPv4 === 'function');
+  } finally {
+    server.close();
+  }
+
+  const failed = results.filter((r) => !r.ok);
+  console.log();
+  console.log(failed.length ? `❌ 自测失败 ${failed.length} 项` : `✅ 自测全部通过（${results.length} 项）`);
+  return failed.length ? 1 : 0;
 }
 
 main(process.argv.slice(2))

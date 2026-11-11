@@ -58,7 +58,12 @@ jobs:
         with:
           node-version: 22
 
-      # 脚本零第三方依赖（只用 Node 自带的 fetch），不用 npm ci
+      # 传输层自测：把「302 重定向要跟随」「错误链要挖出真实原因」
+      # 这类只在特定环境才复现的行为钉住。先跑它，抓之前就知道传输层没坏。
+      - name: 传输层自测
+        run: node scripts/fetch-boc-nav.mjs --selftest
+
+      # 脚本零第三方依赖（只用 Node 内建 http/https），不用 npm ci
       #
       # 整步重试 3 次：抓取是幂等的（写不写文件都算成功），
       # 而跨境链路本来就会间歇性抖动 —— 脚本内部已经有多候选 IP + 4 轮重试，

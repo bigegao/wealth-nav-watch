@@ -3,7 +3,8 @@ name: 中行净值每日增量
 # 每天抓一次中国银行「当日代销理财产品净值」静态页，
 # **只把新增的 (来源, 产品代码, 净值日期) 组合**存成 CSV 推回仓库。
 #
-# 文件名 = 运行日期（北京时间）：`data/YYYY-MM-DD.csv`
+# 文件名 = **数据日**（北京时间）：`data/YYYY-MM-DD.csv`
+# 数据日 = **抓取日的前一天**（凌晨 5 点抓的是昨天披露出来的那一批）。
 # 没有新增数据的那天**不产生文件**（仓库里不会出现只有表头的空 CSV）。
 #
 # 为什么要自己攒：
@@ -17,10 +18,16 @@ name: 中行净值每日增量
 
 on:
   schedule:
-    # UTC 12:20 = 北京时间 20:20。
-    # 中行按**估值日**披露：周五估值的产品净值下周一才出现在页面上，
-    # 所以抓取放在盘后，不是早上。
-    - cron: '20 12 * * *'
+    # UTC 21:00 = **北京时间次日 05:00**。
+    #
+    # 为什么是凌晨 5 点：中行按**估值日**披露，批次在**白天**才刷新 ——
+    # 实测 11-12 白天页面上的最新批次是 11-11，而 11-12 凌晨还是 11-10。
+    # 所以凌晨抓到的必然是「昨天那一批」，文件名与 `data_date` 列统一用
+    # **数据日 = 抓取日 - 1**，不再用「我什么时候跑的」。
+    #
+    # ⚠️ GitHub 的 schedule 会延迟（实测延迟过 7 小时），
+    # 所以「文件在哪天生成」和「数据属于哪天」必须分开记 —— 靠数据日。
+    - cron: '0 21 * * *'
   # 手动补跑（workflow_dispatch 也能用来回补历史缺口）
   workflow_dispatch:
   # 推到 main 也跑一次 —— 改完脚本想立刻验证时很方便。
@@ -83,7 +90,7 @@ jobs:
           echo "::error::连续 3 次抓取失败。"
           exit 1
 
-      - name: 提交当日数据
+      - name: 提交数据日的数据
         env:
           # 用 GITHUB_TOKEN 推送的 commit **不会**再触发一轮 workflow，
           # 所以不会出现「提交 → 触发 → 提交」的循环。
@@ -95,12 +102,16 @@ jobs:
 
           git add data/
           if git diff --cached --quiet; then
-            echo "今天没有新增净值，仓库保持不变。"
+            echo "没有新增净值，仓库保持不变。"
             exit 0
           fi
 
-          run_date="$(TZ=Asia/Shanghai date +%F)"
-          git commit -m "data: ${run_date} 中行净值增量"
+          # 数据日 = 北京日历日 - 1。
+          # ⚠️ 不能用 `date -d yesterday`：那减的是 24 小时，
+          # 凌晨跑的时候减完还是同一个日期，日期没退过去。
+          today="$(TZ=Asia/Shanghai date +%F)"
+          data_date="$(date -u -d "${today} -1 day" +%F)"
+          git commit -m "data: ${data_date} 中行净值增量"
 
           # 认证走 `-c`：**不落盘**到 .git/config。
           # （checkout 用了 persist-credentials: false，所以这里要自己带上凭据）

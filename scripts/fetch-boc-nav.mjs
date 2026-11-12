@@ -95,7 +95,7 @@ const COLUMNS = [
   'per10k', // 每万份基金单位收益（元，货币基金口径）
   'yield7d_pct', // 七日年收益率 %（货币基金口径）
   'source_dir', // 来源静态页
-  'run_date', // 本次抓取日期（北京时间）
+  'data_date', // 数据日（北京时间）= **抓取日的前一天**（见下方「日期规范」）
 ];
 
 // ---------------------------------------------------------------- 参数
@@ -119,6 +119,7 @@ function parseArgs(argv) {
     else if (arg === '--help' || arg === '-h') {
       console.log(
         '用法：node scripts/fetch-boc-nav.mjs [--dir a,b] [--pages N] [--dry-run] [--date YYYY-MM-DD] [--selftest]',
+        '  --date 指定「数据日」（产出 data/<数据日>.csv）；默认 = 昨天（北京时间）',
       );
       process.exit(0);
     } else {
@@ -141,6 +142,18 @@ function beijingDate(d = new Date()) {
     month: '2-digit',
     day: '2-digit',
   }).format(d);
+}
+
+/**
+ * 北京日期往前推 n 天（n 为负数是往前）。
+ *
+ * 不用 `new Date(Date.now() + n*86400000)` —— 那是在 UTC 上加减，
+ * 跨 UTC 日界时会差一天。这里先平移到北京时间（+8 小时），
+ * 再按 UTC 取日期，结果就是「北京时历的那一天」。
+ */
+function beijingDateOffset(days, from = new Date()) {
+  const shifted = new Date(from.getTime() + (8 * 60 + days * 24 * 60) * 60 * 1000);
+  return shifted.toISOString().slice(0, 10);
 }
 
 // ---------------------------------------------------------------- CSV
@@ -538,9 +551,15 @@ async function main(argv) {
   if (opts.selftest) {
     return selftest();
   }
-  const runDate = opts.date || beijingDate();
+  // 日期规范：**数据日 = 抓取日的前一天**。
+  //
+  // 中行按估值日披露、批次在第二天才刷新，所以凌晨 5 点抓到的
+  // 是「昨天（按北京日）披露出来的那一批」。文件名与 `data_date` 列
+  // 一律用**数据日**，不再用「我什么时候跑的」——
+  // 否则同一个「2026-11-12.csv」在不同批次下含义会漂。
+  const dataDate = opts.date || beijingDateOffset(-1);
 
-  console.log(`抓取日期（北京时间）：${runDate}`);
+  console.log(`数据日（北京时间）：${dataDate}（抓取日 ${beijingDate()} 的前一天）`);
   console.log(`来源：${opts.dirs.join('、')}（每个源最多 ${opts.pages} 页）`);
 
   const known = await loadKnownKeys();
@@ -583,7 +602,7 @@ async function main(argv) {
   }
 
   await mkdir(DATA_DIR, { recursive: true });
-  const outFile = path.join(DATA_DIR, `${runDate}.csv`);
+  const outFile = path.join(DATA_DIR, `${dataDate}.csv`);
 
   // 同一天重跑 → 合并而不是覆盖（去重键相同的不重复写）
   const existing = await loadRunDateRows(outFile);
@@ -600,7 +619,7 @@ async function main(argv) {
       row.per10k,
       row.yield7d_pct,
       row.source_dir,
-      runDate,
+      dataDate,
     ];
     merged.set(csvRowKey(csvRow), csvRow);
   }

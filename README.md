@@ -136,7 +136,7 @@ awk -F, 'NR==1 || $9=="srfd6_2024"' data/2026-11-11.csv
 需要 Node 18+（零第三方依赖，只用自带的 `fetch`）：
 
 ```bash
-node scripts/fetch-boc-nav.mjs                # 抓全部源，算增量，写 data/<今天>.csv
+node scripts/fetch-boc-nav.mjs                # 抓全部源，算增量，写 data/<数据日>.csv
 node scripts/fetch-boc-nav.mjs --dry-run      # 只算不写，看看这次会新增什么
 node scripts/fetch-boc-nav.mjs --dir srfd6_2024 --pages 20   # 只抓理财的前 20 页
 node scripts/diagnose-network.mjs             # 网络诊断（抓不动的时候先跑这个）

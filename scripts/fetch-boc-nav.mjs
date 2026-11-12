@@ -534,7 +534,7 @@ async function loadKnownKeys() {
 }
 
 /** 读当天的文件（如果 workflow 重跑过），用来合并而不是覆盖 */
-async function loadRunDateRows(file) {
+async function loadExistingRows(file) {
   try {
     const text = await readFile(file, 'utf8');
     const rows = parseCsv(text);
@@ -605,7 +605,7 @@ async function main(argv) {
   const outFile = path.join(DATA_DIR, `${dataDate}.csv`);
 
   // 同一天重跑 → 合并而不是覆盖（去重键相同的不重复写）
-  const existing = await loadRunDateRows(outFile);
+  const existing = await loadExistingRows(outFile);
   const merged = new Map();
   for (const row of existing) merged.set(csvRowKey(row), row);
   for (const row of fresh) {

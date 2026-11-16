@@ -80,6 +80,27 @@ const RETRIES = 4;
 const REQUEST_TIMEOUT = 30_000;
 
 /**
+ * 「一两个月没变化」的天数 —— 净值日期比这个更早的算**陈旧**。
+ *
+ * ⚠️ **必须与 stock-tracer 仓库的 `BOC_STALE_DAYS` 一致**（那边是 60）。
+ * 两个仓库各有一份实现（这里零依赖、不 import 那边），
+ * 数值一旦漂移就会出现「上游写了、下游早停」这种口径不一致。
+ *
+ * 取 60 天的理由：季频披露的产品平时净值日期就有 90 天大，
+ * 阈值必须宽过季度周期，否则会把正常在披露的季频产品判成僵尸。
+ */
+const STALE_DAYS = 60;
+
+/**
+ * 早停时一块翻多少页。
+ *
+ * 判据是「这一块里最新的净值日期都早于截止日 → 后面只会更老，停」。
+ * 用「整块」而不是「连续 N 页」：块内夹着一页新鲜的就继续翻，
+ * 漏抓的风险更小。
+ */
+const STALE_BLOCK_PAGES = 8;
+
+/**
  * CSV 的列定义。
  *
  * 数值**保留页面上的原始字符串**，不做浮点转换 —— 一是避免精度损失，
@@ -107,19 +128,25 @@ function parseArgs(argv) {
     dryRun: false,
     date: null,
     selftest: false,
+    /** 陈旧天数：净值日期比「今天 − N 天」还老的不抓、不写。0 = 不过滤 */
+    staleDays: STALE_DAYS,
   };
   for (let i = 0; i < argv.length; i += 1) {
     const arg = argv[i];
     const next = () => argv[++i] ?? '';
     if (arg === '--dir') opts.dirs = next().split(',').map((s) => s.trim()).filter(Boolean);
     else if (arg === '--pages') opts.pages = Number(next());
+    else if (arg === '--stale-days') opts.staleDays = Number(next());
+    else if (arg === '--full') opts.staleDays = 0;
     else if (arg === '--dry-run') opts.dryRun = true;
     else if (arg === '--date') opts.date = next();
     else if (arg === '--selftest') opts.selftest = true;
     else if (arg === '--help' || arg === '-h') {
       console.log(
-        '用法：node scripts/fetch-boc-nav.mjs [--dir a,b] [--pages N] [--dry-run] [--date YYYY-MM-DD] [--selftest]',
+        '用法：node scripts/fetch-boc-nav.mjs [--dir a,b] [--pages N] [--stale-days N] [--full] [--dry-run] [--date YYYY-MM-DD] [--selftest]',
         '  --date 指定「数据日」（产出 data/<数据日>.csv）；默认 = 昨天（北京时间）',
+        `  --stale-days N  净值日期早于「今天 − N 天」的算陈旧，不抓不写（默认 ${STALE_DAYS}）`,
+        '  --full          等价于 --stale-days 0：全量翻页，什么都不过滤（回补历史时用）',
       );
       process.exit(0);
     } else {
@@ -131,7 +158,55 @@ function parseArgs(argv) {
     console.error('--pages 至少为 1');
     process.exit(2);
   }
+  if (!Number.isInteger(opts.staleDays) || opts.staleDays < 0) {
+    console.error('--stale-days 不能是负数（0 = 不过滤）');
+    process.exit(2);
+  }
   return opts;
+}
+
+/**
+ * 截止日 = 北京今天往前推 N 天。
+ *
+ * @param {number} staleDays 天数；0 = 永不过期（返回空串）
+ * @returns {string} YYYY-MM-DD，空串表示不过滤
+ */
+function staleCutoff(staleDays) {
+  if (!staleDays || staleDays <= 0) return '';
+  const shifted = new Date(Date.now() + (8 * 60 - staleDays * 24 * 60) * 60 * 1000);
+  return shifted.toISOString().slice(0, 10);
+}
+
+/** 这一行的净值日期算不算「陈旧」（日期认不出来 → 不算，宁可多抓一次） */
+function isStale(navDate, cutoff) {
+  if (!cutoff) return false;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(navDate ?? ''))) return false;
+  return navDate < cutoff;
+}
+
+/** 一批行里最新的净值日期 */
+function maxNavDate(rows) {
+  let max = null;
+  for (const r of rows) {
+    const d = String(r.nav_date ?? '');
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) continue;
+    if (max === null || d > max) max = d;
+  }
+  return max;
+}
+
+/**
+ * 这一块要不要早停？
+ *
+ * 判据：**整块里最新的净值日期都早于截止日** → 后面只会更老，收工。
+ * 夹着一页新鲜的就继续翻（漏抓的风险更小）。
+ *
+ * 「没有有效日期」不算陈旧 —— 宁可多翻几页，也不能漏。
+ */
+function shouldStopForStale(blockRows, cutoff) {
+  if (!cutoff) return false;
+  const newest = maxNavDate(blockRows);
+  return newest !== null && newest < cutoff;
 }
 
 /** 北京日期（YYYY-MM-DD）—— 中国的理财数据，看的是北京日期 */
@@ -460,44 +535,91 @@ function sleep(ms) {
  * **抓失败要抛错** —— 宁可整个任务失败，也不能拿半截数据去算增量：
  * 那样会把「没抓到」写成「没有变化」，历史就断了。
  */
-async function fetchSource(dir, maxPages) {
+/**
+ * 抓一个源的所有页。
+ *
+ * **抓失败要抛错** —— 宁可整个任务失败，也不能拿半截数据去算增量：
+ * 那样会把「没抓到」写成「没有变化」，历史就断了。
+ *
+ * ## 分块 + 陈旧早停
+ *
+ * 按块（`STALE_BLOCK_PAGES` 页一块）翻，块内并发、块间串行。
+ * 每抓完一块就问一次：**这一块里最新的净值日期都早于截止日吗？**
+ * 是 → 后面只会更老，收工（`stopReason: 'stale'`）。
+ *
+ * 为什么早停不会漏数据：页序 = 披露批次（页码越小 = 披露日期越新），
+ * 产品**再次披露时会回到前面的页** —— 睡着的产品一醒来必然出现在
+ * 我们还在翻的前几页里。万一顺序有例外，由**每周一次全量扫描**兜底。
+ *
+ * @param {string} dir 来源目录
+ * @param {number} maxPages 最多翻几页
+ * @param {{cutoff?: string}} opts cutoff 非空才启用早停
+ */
+async function fetchSource(dir, maxPages, opts = {}) {
+  const cutoff = opts.cutoff ?? '';
   const rows = [];
-  let cursor = 1;
   let emptyStreak = 0;
-  let done = 0;
+  let scanned = 0;
+  let stopReason = null;
+  let stopPage = null;
   const started = Date.now();
-  const worker = async () => {
-    while (cursor <= maxPages) {
-      const page = cursor;
-      cursor += 1;
-      const html = await fetchPage(dir, page);
-      done += 1;
-      // 跨境抓取要几分钟，日志里得有动静，否则看不出是在跑还是在卡
-      if (done % 20 === 0) {
-        const secs = ((Date.now() - started) / 1000).toFixed(0);
-        console.log(`    ${dir}：已抓 ${done} 页（${secs}s），累计 ${rows.length} 行`);
+
+  for (let blockStart = 1; blockStart <= maxPages; blockStart += STALE_BLOCK_PAGES) {
+    const blockEnd = Math.min(maxPages, blockStart + STALE_BLOCK_PAGES - 1);
+    const pages = new Array(blockEnd - blockStart + 1).fill(null);
+
+    // 块内并发
+    let cursor = 0;
+    const worker = async () => {
+      while (cursor < pages.length) {
+        const idx = cursor;
+        cursor += 1;
+        pages[idx] = await fetchPage(dir, blockStart + idx);
       }
+    };
+    await Promise.all(
+      Array.from({ length: Math.min(CONCURRENCY, pages.length) }, () => worker()),
+    );
+
+    const blockRows = [];
+    for (const html of pages) {
+      scanned += 1;
       if (html === null) {
         // 404 = 页面不存在 = 翻到底了
         emptyStreak += 1;
-        if (emptyStreak >= 2) return;
         continue;
       }
       const pageRows = parseBocPage(html);
       if (pageRows.length === 0) {
         emptyStreak += 1;
-        // 连续两页空 → 后面没有了
-        if (emptyStreak >= 2) return;
       } else {
         emptyStreak = 0;
-        rows.push(...pageRows);
+        blockRows.push(...pageRows);
       }
     }
-  };
-  await Promise.all(
-    Array.from({ length: Math.min(CONCURRENCY, maxPages) }, () => worker()),
-  );
-  return rows;
+    rows.push(...blockRows);
+
+    const secs = ((Date.now() - started) / 1000).toFixed(0);
+    console.log(
+      `    ${dir}：已抓 ${scanned} 页（${secs}s），累计 ${rows.length} 行`,
+    );
+
+    // 连续两页空 → 后面没有了
+    if (emptyStreak >= 2) {
+      stopReason = 'empty';
+      stopPage = blockEnd;
+      break;
+    }
+
+    // 这一块整块都陈旧 → 后面只会更老，收工
+    if (shouldStopForStale(blockRows, cutoff)) {
+      stopReason = 'stale';
+      stopPage = blockEnd;
+      break;
+    }
+  }
+
+  return { rows, scanned, stopReason, stopPage };
 }
 
 // ---------------------------------------------------------------- 增量
@@ -562,18 +684,41 @@ async function main(argv) {
   console.log(`数据日（北京时间）：${dataDate}（抓取日 ${beijingDate()} 的前一天）`);
   console.log(`来源：${opts.dirs.join('、')}（每个源最多 ${opts.pages} 页）`);
 
+  // 陈旧截止日：净值日期比它还早的 = 一两个月没变化，不抓、不写。
+  const cutoff = staleCutoff(opts.staleDays);
+  if (cutoff) {
+    console.log(
+      `陈旧截止日：${cutoff}（净值日期早于它的算「${opts.staleDays} 天没变化」，不写进增量）`,
+    );
+  } else {
+    console.log('陈旧过滤：关（全量）');
+  }
+
   const known = await loadKnownKeys();
   console.log(`仓库里已有的 (来源,代码,净值日期) 组合：${known.size} 个`);
 
   const all = [];
+  let staleSeen = 0;
   for (const dir of opts.dirs) {
     const started = Date.now();
-    const rows = await fetchSource(dir, opts.pages);
+    const fetched = await fetchSource(dir, opts.pages, { cutoff });
     const label = SOURCES.find((s) => s.dir === dir)?.label ?? dir;
     const secs = ((Date.now() - started) / 1000).toFixed(1);
-    console.log(`  ${dir}（${label}）：${rows.length} 行（用时 ${secs}s）`);
-    all.push(...rows.map((r) => ({ ...r, source_dir: dir })));
+    const why =
+      fetched.stopReason === 'stale'
+        ? `，第 ${fetched.stopPage} 页起整块陈旧，提前收工`
+        : fetched.stopReason === 'empty'
+          ? '，翻到底了'
+          : '';
+    console.log(
+      `  ${dir}（${label}）：扫 ${fetched.scanned} 页 / ${fetched.rows.length} 行（用时 ${secs}s）${why}`,
+    );
+    // 陈旧的行不进增量 —— 一两个月没变化的产品只会往仓库里堆僵尸数据。
+    const keep = cutoff ? fetched.rows.filter((r) => !isStale(r.nav_date, cutoff)) : fetched.rows;
+    staleSeen += fetched.rows.length - keep.length;
+    all.push(...keep.map((r) => ({ ...r, source_dir: dir })));
   }
+  if (staleSeen > 0) console.log(`陈旧跳过 ${staleSeen} 行（不进增量）`);
 
   // 去重：同一源里同一 (code, nav_date) 只留一条；仓库里已有的也不算增量
   const seen = new Set();
@@ -733,6 +878,32 @@ async function selftest() {
 
     // 7) 只取 IPv4 —— IPv6 在 GitHub runner 上是黑洞
     check('错误链只取 IPv4 的过滤逻辑存在', typeof resolveIPv4 === 'function');
+
+    // 8) 陈旧截止日 = 今天往前推 N 天
+    const cutoff = staleCutoff(60);
+    const expectCutoff = new Date(Date.now() + (8 * 60 - 60 * 24 * 60) * 60 * 1000)
+      .toISOString()
+      .slice(0, 10);
+    check(
+      '陈旧截止日 = 北京今天往前推 60 天',
+      cutoff === expectCutoff,
+      `cutoff=${cutoff} 期望=${expectCutoff}`,
+    );
+
+    // 9) 陈旧判定：早于截止日算陈旧，日期认不出来不算
+    check('净值日期早于截止日 → 陈旧', isStale('2019-05-06', '2026-09-17') === true);
+    check('净值日期不早于截止日 → 不陈旧', isStale('2026-11-15', '2026-09-17') === false);
+    check(
+      '日期认不出来 → 不算陈旧（宁可多抓一次）',
+      isStale('不是日期', '2026-09-17') === false && isStale('', '2026-09-17') === false,
+    );
+
+    // 10) 早停判据：整块都陈旧才停，夹着一页新鲜就继续
+    const oldBlock = [{ nav_date: '2019-05-06' }, { nav_date: '2019-05-07' }];
+    const mixedBlock = [{ nav_date: '2019-05-06' }, { nav_date: '2026-11-15' }];
+    check('整块都陈旧 → 停', shouldStopForStale(oldBlock, '2026-09-17') === true);
+    check('块里夹着一页新鲜的 → 不停', shouldStopForStale(mixedBlock, '2026-09-17') === false);
+    check('不过滤时永远不停', shouldStopForStale(oldBlock, '') === false);
   } finally {
     server.close();
   }

@@ -1,6 +1,15 @@
 # wealth-nav-watch
 
-**中国银行代销理财净值的每日增量数据。**
+**中国银行代销理财净值的每日增量数据 + 蓝筹分红日历订阅。**
+
+## 仓库里放两样东西
+
+| | 抓的是什么 | 产物 | 怎么用 |
+| --- | --- | --- | --- |
+| **中行净值** | 中行代销理财每天新披露的净值 | `data/YYYY-MM-DD.csv` | 直接读 CSV |
+| **分红日历** | 蓝筹 / 高股息股票的**分红公告** | `calendar/dividend-calendar.ics` | **订阅**（地址见下） |
+
+### 中行净值
 
 每天自动抓一次中行的净值披露页，只把**新增**的净值存成 CSV 推进仓库：
 `data/YYYY-MM-DD.csv`，文件名是**数据日**（北京时间）。
@@ -13,6 +22,15 @@ data/
 ```
 
 没有新增数据的那天**不产生文件**（不会出现只有表头的空 CSV）。
+
+### 分红日历（订阅地址）
+
+```
+https://raw.githubusercontent.com/bigegao/wealth-nav-watch/main/calendar/dividend-calendar.ics
+```
+
+把这个地址丢进日历 App 的「订阅日历 / 从 URL 添加」就行 ——
+不用服务器、不用注册，仓库更新了日历就跟着更新。详见下面的「分红日历订阅」。
 
 ### 这个仓库是**唯一的抓取点**
 
@@ -239,28 +257,165 @@ Actions 上对应「网络诊断」工作流（手动触发）。
 
 ---
 
+## 分红日历订阅
+
+抓**蓝筹 / 高股息**股票的**分红公告**，生成**日历订阅（ICS）**推进仓库，
+订阅方用 GitHub raw 直接读。
+
+### 订阅地址
+
+```
+https://raw.githubusercontent.com/bigegao/wealth-nav-watch/main/calendar/dividend-calendar.ics
+```
+
+日历 App → 「订阅日历 / 从 URL 添加」→ 贴上去。
+iOS/macOS 的「日历」App、Apple 日历、Google 日历、Outlook 都能读 ICS。
+
+> 分支还没合进 `main` 之前，用分支地址订阅：
+> `https://raw.githubusercontent.com/bigegao/wealth-nav-watch/feat/dividend-calendar-feed/calendar/dividend-calendar.ics`
+
+### 日历里是哪两类事件
+
+| 分类 | 落点日期 | 是什么 |
+| --- | --- | --- |
+| `分红` | **除权除息日**（没有就退到股权登记日） | 这一天除权除息 —— 真正影响股价的那天 |
+| `公告` | **公告披露日** | 某笔分红的预案 / 实施公告出来了 |
+
+两条都必要：**分红**是提醒（哪天该落袋），**公告**是凭据
+（这条安排是哪份公告说的，点事件能直接打开公告原文）。
+
+点开一个 `分红` 事件，说明里有报告期、股权登记日、除权除息日、每 10 股派息、
+方案进度，以及对应的公告标题与原文链接。
+
+### 抓的是什么
+
+| 数据 | 来源 | 接口 |
+| --- | --- | --- |
+| **分红方案**（报告期 / 登记日 / 除权日 / 派息 / 进度） | 东方财富数据中心 `RPT_SHAREBONUS_DET` | 由上市公司《利润分配方案公告》整理 |
+| **分红公告**（标题 / 披露日 / 原文链接） | 东方财富公告库 `np-anotice-stock` | 公告原文 |
+
+两者按**公告日**对上号：方案的「实施公告日」↔ 公告的「披露日」，
+方案的「预案公告日」也留作兜底。
+
+清单在 `config/dividend-watchlist.json`（50 只，口径：沪深主板为主的高股息 /
+现金流稳定的蓝筹，兼顾银行、能源、交通、消费、医药）。
+清单本身来自 [`lanxyou/stock-tracer`](https://github.com/lanxyou/stock-tracer)
+的 `shared/data/default-watchlist.ts` —— 搬过来是因为**抓取放数据仓**，
+改口径时两边要一起改。
+
+### 口径
+
+1. **一条分红方案 = 一个日历条目**，不按日期拆成多条 ——
+   登记日和除权日差一个交易日，拆两条会让同一笔分红在日历里出现两遍。
+   两个日期都写在事件的说明里。
+2. **落点日期优先用除权除息日**，没有就退回股权登记日；
+   两个都没有（只有报告期）**不进日历** —— 报告期不是「哪天除权」。
+   实测当前清单里有 11 笔方案停在「董事会决议通过 / 预披露」，日期还没定，
+   它们要等实施公告出来才进日历。
+3. **已取消的方案不进日历**（进度含「取消 / 不分配 / 终止」）。
+4. **UID 不含金额**：派息额在预案与实施公告之间会改（10 派 4.2 元 → 10 派 4.5 元）。
+   金额进了 UID，日历 App 会当成两条事件 —— 用户的日历里会同时留着「预计」和「已实施」。
+   金额写在说明里，同一个 UID 的内容变了，日历 App 会**就地更新**那一条。
+5. **事件类型分开**：`分红` 与 `公告` 是两类，订阅方可以在日历 App 里按分类过滤。
+
+### 产物是**幂等**的
+
+产物里**不写「生成时间」**，`DTSTAMP` 也取自数据本身（公告日 / 方案公告日），
+所以**数据没变 → 产物字节级不变 → 仓库不会产生无意义的提交**。
+这跟中行净值那条流水线「没有新增数据就不产生文件」是同一个思路。
+
+唯一随时间滑动的是 `分红` 事件的回看窗口（默认 180 天）：
+只有当天正好有事件跨过这个边界，文件才会变一次。
+
+### 产物
+
+| 文件 | 内容 |
+| --- | --- |
+| `calendar/dividend-calendar.ics` | **日历订阅**（订阅这个） |
+| `calendar/dividend-announcements.json` | 抓到的分红公告（结构化） |
+| `calendar/dividend-announcements.csv` | 同上（表格，方便瞄一眼） |
+| `calendar/dividend-plans.json` | 抓到的分红方案（登记日 / 除权日 / 派息） |
+
+### 本地跑一次
+
+需要 Node 18+（零第三方依赖，只用内建 `node:https` / `node:dns`）：
+
+```bash
+node scripts/fetch-dividend-calendar.mjs                    # 抓取并写产物
+node scripts/fetch-dividend-calendar.mjs --dry-run          # 只抓不写，打印摘要
+node scripts/fetch-dividend-calendar.mjs --selftest         # 自测（不联网）
+node scripts/fetch-dividend-calendar.mjs --codes 600660,600036   # 只抓指定代码
+node scripts/fetch-dividend-calendar.mjs --history-days 0        # 只留未来的分红事件
+node scripts/fetch-dividend-calendar.mjs --plan-window-days 2000 # 把方案历史全写进仓库
+```
+
+| 参数 | 说明 |
+| --- | --- |
+| `--history-days N` | `分红` 事件的回看天数（默认 180；0 = 只留未来的） |
+| `--announcement-days N` | `公告` 事件在日历里保留的天数（默认 60） |
+| `--announcement-window-days N` | 抓公告的时间窗口（默认 400） |
+| `--plan-window-days N` | 分红方案写进产物的窗口（默认 400；0 = 全量历史） |
+| `--codes a,b` | 只抓指定代码 |
+| `--as-of YYYY-MM-DD` | 指定「今天」（影响窗口判定；默认 = 北京时间今天） |
+| `--dry-run` | 只抓不写 |
+| `--selftest` | 自测（不联网） |
+
+### 自测
+
+日历订阅的错误**在抓取阶段看不出来**：一行超了 75 字节、UID 变了、转义顺序写反了 ——
+数据照样抓到，但用户的日历 App 里会多出重复事件、或者干脆收不到。
+
+所以脚本带一个 `--selftest`（不联网，只测纯函数），抓之前先跑：
+
+- ICS 转义顺序（**先转义反斜杠**，再转义分号与逗号 —— 反过来会把新加的反斜杠再转义一次）
+- 折行：每行 ≤ 75 **字节**、续行以空格开头、**不切坏 UTF-8**（一个汉字 3 字节）
+- 落点日期的优先级、已取消的方案被排除
+- UID 稳定性（**金额变了 UID 不变** → 日历就地更新，而不是多出一条）
+- 方案 ↔ 公告的对应关系（优先实施公告，退到预案公告）
+- 产物的结构（`BEGIN`/`END` 配对、每个事件有 UID/DTSTAMP/DTSTART/DTEND、无重复 UID）
+- 两次生成字节一致（幂等）
+
+---
+
 ## 目录
 
 ```
-.github/workflows/daily-nav-sync.yml   每日 workflow
-.github/workflows/diagnose-network.yml  网络诊断（手动触发）
-scripts/fetch-boc-nav.mjs               抓取 + 算增量 + 写 CSV（零依赖）
-scripts/diagnose-network.mjs            网络诊断脚本
-data/                                  每日增量数据
-samples/                               字段样例（不参与增量计算）
+.github/workflows/daily-nav-sync.yml      中行净值每日 workflow
+.github/workflows/diagnose-network.yml     网络诊断（手动触发）
+.github/workflows/dividend-calendar.yml    分红日历每日 workflow
+scripts/fetch-boc-nav.mjs                  抓取 + 算增量 + 写 CSV（零依赖）
+scripts/diagnose-network.mjs               网络诊断脚本
+scripts/fetch-dividend-calendar.mjs        抓分红公告 + 生成 ICS/JSON/CSV（零依赖）
+scripts/selftest.mjs                       日历订阅的自测（不联网）
+config/dividend-watchlist.json             蓝筹 / 高股息清单（50 只）
+data/                                     每日增量数据
+calendar/                                 分红日历订阅与公告数据
+samples/                                  字段样例（不参与增量计算）
 ```
 
 ---
 
 ## 限制
 
+### 中行净值
+
 - **补不了合并之前的历史** —— 中行页面上没有就永远没有。
 - **被新披露覆盖的批次补不回来** —— 页面只留最新一条。
 - **产品名偶有为空** —— 上游就是这样，脚本原样保留，不编造。
 - **数据来自中行的展示口径**，与基金业协会的登记口径不一定一致；用于投资判断请以产品说明书和官方披露为准。
 
+### 分红日历
+
+- **只覆盖清单里那 50 只** —— 不在清单里的股票不进日历。
+- **公告原文抓不到无限历史** —— 公告库一次只给最近的一批（脚本按 400 天窗口抓）。
+- **方案还没定日期就不进日历** —— 停在「董事会决议通过 / 预披露」的方案要等实施公告出来。
+- **公告与方案的对应靠日期** —— 对不上就在事件里标「未匹配到对应的分红公告原文」，不硬凑。
+- **数据来自东方财富的整理口径**，与上市公司公告原文可能有个别出入；
+  用于投资判断请以**公告原文**为准（事件里的链接就是原文）。
+
 ---
 
 ## 许可
 
-数据来自中国银行公开披露页面。本仓库只做数据留存与分析，不改变原值的含义。
+中行净值数据来自中国银行公开披露页面；分红公告与分红方案来自东方财富公开接口，
+并附有上市公司公告原文链接。本仓库只做数据留存与分析，不改变原值的含义。

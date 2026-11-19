@@ -1,0 +1,2134 @@
+{
+  "announcements": [
+    {
+      "code": "600132",
+      "art_code": "AN202611161831755641",
+      "title": "重庆啤酒:重庆啤酒股份有限公司关于2026年度中期利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-11-17",
+      "url": "https://data.eastmoney.com/notices/detail/600132/AN202611161831755641.html",
+      "source": "eastmoney_notice",
+      "name": "重庆啤酒"
+    },
+    {
+      "code": "002142",
+      "art_code": "AN202610291831173654",
+      "title": "宁波银行:宁波银行股份有限公司2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-30",
+      "url": "https://data.eastmoney.com/notices/detail/002142/AN202610291831173654.html",
+      "source": "eastmoney_notice",
+      "name": "宁波银行"
+    },
+    {
+      "code": "600887",
+      "art_code": "AN202610291831182300",
+      "title": "伊利股份:内蒙古伊利实业集团股份有限公司关于2026年中期利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-10-30",
+      "url": "https://data.eastmoney.com/notices/detail/600887/AN202610291831182300.html",
+      "source": "eastmoney_notice",
+      "name": "伊利股份"
+    },
+    {
+      "code": "000651",
+      "art_code": "AN202610261830946056",
+      "title": "格力电器:2026年中期利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-10-27",
+      "url": "https://data.eastmoney.com/notices/detail/000651/AN202610261830946056.html",
+      "source": "eastmoney_notice",
+      "name": "格力电器"
+    },
+    {
+      "code": "601298",
+      "art_code": "AN202610201830722395",
+      "title": "青岛港:青岛港国际股份有限公司2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-21",
+      "url": "https://data.eastmoney.com/notices/detail/601298/AN202610201830722395.html",
+      "source": "eastmoney_notice",
+      "name": "青岛港"
+    },
+    {
+      "code": "601088",
+      "art_code": "AN202610151830516830",
+      "title": "中国神华:中国神华2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-16",
+      "url": "https://data.eastmoney.com/notices/detail/601088/AN202610151830516830.html",
+      "source": "eastmoney_notice",
+      "name": "中国神华"
+    },
+    {
+      "code": "601919",
+      "art_code": "AN202610151830514830",
+      "title": "中远海控:中远海控2026年中期权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-16",
+      "url": "https://data.eastmoney.com/notices/detail/601919/AN202610151830514830.html",
+      "source": "eastmoney_notice",
+      "name": "中远海控"
+    },
+    {
+      "code": "601225",
+      "art_code": "AN202610141830463260",
+      "title": "陕西煤业:陕西煤业股份有限公司2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-15",
+      "url": "https://data.eastmoney.com/notices/detail/601225/AN202610141830463260.html",
+      "source": "eastmoney_notice",
+      "name": "陕西煤业"
+    },
+    {
+      "code": "601398",
+      "art_code": "AN202610141830463887",
+      "title": "工商银行:工商银行A股2026年半年度分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-15",
+      "url": "https://data.eastmoney.com/notices/detail/601398/AN202610141830463887.html",
+      "source": "eastmoney_notice",
+      "name": "工商银行"
+    },
+    {
+      "code": "601601",
+      "art_code": "AN202610141830463356",
+      "title": "中国太保:中国太保2026年半年度分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-15",
+      "url": "https://data.eastmoney.com/notices/detail/601601/AN202610141830463356.html",
+      "source": "eastmoney_notice",
+      "name": "中国太保"
+    },
+    {
+      "code": "601288",
+      "art_code": "AN202610131830410812",
+      "title": "农业银行:农业银行2026年半年度A股分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-14",
+      "url": "https://data.eastmoney.com/notices/detail/601288/AN202610131830410812.html",
+      "source": "eastmoney_notice",
+      "name": "农业银行"
+    },
+    {
+      "code": "601006",
+      "art_code": "AN202610121830363259",
+      "title": "大秦铁路:大秦铁路2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-13",
+      "url": "https://data.eastmoney.com/notices/detail/601006/AN202610121830363259.html",
+      "source": "eastmoney_notice",
+      "name": "大秦铁路"
+    },
+    {
+      "code": "601006",
+      "art_code": "AN202610121830363257",
+      "title": "大秦铁路:北京德恒(太原)律师事务所关于大秦铁路股份有限公司差异化权益分派事项之专项法律意见",
+      "column": "法律意见书",
+      "notice_date": "2026-10-13",
+      "url": "https://data.eastmoney.com/notices/detail/601006/AN202610121830363257.html",
+      "source": "eastmoney_notice",
+      "name": "大秦铁路"
+    },
+    {
+      "code": "000999",
+      "art_code": "AN202610081830217174",
+      "title": "华润三九:2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-09",
+      "url": "https://data.eastmoney.com/notices/detail/000999/AN202610081830217174.html",
+      "source": "eastmoney_notice",
+      "name": "华润三九"
+    },
+    {
+      "code": "600398",
+      "art_code": "AN202610071830184955",
+      "title": "海澜之家:海澜之家集团股份有限公司2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-10-08",
+      "url": "https://data.eastmoney.com/notices/detail/600398/AN202610071830184955.html",
+      "source": "eastmoney_notice",
+      "name": "海澜之家"
+    },
+    {
+      "code": "601006",
+      "art_code": "AN202609231829803629",
+      "title": "大秦铁路:大秦铁路关于调整2026年半年度利润分配方案每股分红金额的公告(修订版)",
+      "column": "分配方案调整",
+      "notice_date": "2026-09-24",
+      "url": "https://data.eastmoney.com/notices/detail/601006/AN202609231829803629.html",
+      "source": "eastmoney_notice",
+      "name": "大秦铁路"
+    },
+    {
+      "code": "601006",
+      "art_code": "AN202609211829724509",
+      "title": "大秦铁路:大秦铁路关于调整2026年半年度利润分配方案每股分红金额的公告",
+      "column": "分配方案调整",
+      "notice_date": "2026-09-22",
+      "url": "https://data.eastmoney.com/notices/detail/601006/AN202609211829724509.html",
+      "source": "eastmoney_notice",
+      "name": "大秦铁路"
+    },
+    {
+      "code": "600926",
+      "art_code": "AN202609181829616200",
+      "title": "杭州银行:杭州银行2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-09-19",
+      "url": "https://data.eastmoney.com/notices/detail/600926/AN202609181829616200.html",
+      "source": "eastmoney_notice",
+      "name": "杭州银行"
+    },
+    {
+      "code": "605499",
+      "art_code": "AN202609171829527665",
+      "title": "东鹏饮料:北京德恒(深圳)律师事务所关于东鹏饮料(集团)股份有限公司2026年半年度差异化分红事项之法律意见",
+      "column": "法律意见书",
+      "notice_date": "2026-09-18",
+      "url": "https://data.eastmoney.com/notices/detail/605499/AN202609171829527665.html",
+      "source": "eastmoney_notice",
+      "name": "东鹏饮料"
+    },
+    {
+      "code": "605499",
+      "art_code": "AN202609171829527666",
+      "title": "东鹏饮料:东鹏饮料(集团)股份有限公司2026年半年度A股权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-09-18",
+      "url": "https://data.eastmoney.com/notices/detail/605499/AN202609171829527666.html",
+      "source": "eastmoney_notice",
+      "name": "东鹏饮料"
+    },
+    {
+      "code": "605499",
+      "art_code": "AN202609171829527668",
+      "title": "东鹏饮料:东鹏饮料(集团)股份有限公司关于2026年半年度权益分派实施后调整回购价格上限的公告",
+      "column": "回购方案修订",
+      "notice_date": "2026-09-18",
+      "url": "https://data.eastmoney.com/notices/detail/605499/AN202609171829527668.html",
+      "source": "eastmoney_notice",
+      "name": "东鹏饮料"
+    },
+    {
+      "code": "000001",
+      "art_code": "AN202609161829468183",
+      "title": "平安银行:2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-09-17",
+      "url": "https://data.eastmoney.com/notices/detail/000001/AN202609161829468183.html",
+      "source": "eastmoney_notice",
+      "name": "平安银行"
+    },
+    {
+      "code": "000538",
+      "art_code": "AN202609161829465224",
+      "title": "云南白药:2026年特别分红权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-09-17",
+      "url": "https://data.eastmoney.com/notices/detail/000538/AN202609161829465224.html",
+      "source": "eastmoney_notice",
+      "name": "云南白药"
+    },
+    {
+      "code": "600660",
+      "art_code": "AN202609161829464873",
+      "title": "福耀玻璃:福耀玻璃2026年半年度A股权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-09-17",
+      "url": "https://data.eastmoney.com/notices/detail/600660/AN202609161829464873.html",
+      "source": "eastmoney_notice",
+      "name": "福耀玻璃"
+    },
+    {
+      "code": "601838",
+      "art_code": "AN202609111829275333",
+      "title": "成都银行:成都银行股份有限公司2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-09-12",
+      "url": "https://data.eastmoney.com/notices/detail/601838/AN202609111829275333.html",
+      "source": "eastmoney_notice",
+      "name": "成都银行"
+    },
+    {
+      "code": "601857",
+      "art_code": "AN202609071829100456",
+      "title": "中国石油:中国石油天然气股份有限公司2026年半年度A股权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-09-08",
+      "url": "https://data.eastmoney.com/notices/detail/601857/AN202609071829100456.html",
+      "source": "eastmoney_notice",
+      "name": "中国石油"
+    },
+    {
+      "code": "600750",
+      "art_code": "AN202609021828929078",
+      "title": "华润江中:华润江中2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-09-03",
+      "url": "https://data.eastmoney.com/notices/detail/600750/AN202609021828929078.html",
+      "source": "eastmoney_notice",
+      "name": "华润江中"
+    },
+    {
+      "code": "601318",
+      "art_code": "AN202609021828924181",
+      "title": "中国平安:中国平安2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-09-03",
+      "url": "https://data.eastmoney.com/notices/detail/601318/AN202609021828924181.html",
+      "source": "eastmoney_notice",
+      "name": "中国平安"
+    },
+    {
+      "code": "601728",
+      "art_code": "AN202609021828933012",
+      "title": "中国电信:中国电信股份有限公司2026年半年度A股利润分配实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-09-03",
+      "url": "https://data.eastmoney.com/notices/detail/601728/AN202609021828933012.html",
+      "source": "eastmoney_notice",
+      "name": "中国电信"
+    },
+    {
+      "code": "601857",
+      "art_code": "AN202608301828734269",
+      "title": "中国石油:中国石油天然气股份有限公司2026年半年度A股利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-31",
+      "url": "https://data.eastmoney.com/notices/detail/601857/AN202608301828734269.html",
+      "source": "eastmoney_notice",
+      "name": "中国石油"
+    },
+    {
+      "code": "000333",
+      "art_code": "AN202608281828644258",
+      "title": "美的集团:关于2026年中期利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-29",
+      "url": "https://data.eastmoney.com/notices/detail/000333/AN202608281828644258.html",
+      "source": "eastmoney_notice",
+      "name": "美的集团"
+    },
+    {
+      "code": "000538",
+      "art_code": "AN202608281828642473",
+      "title": "云南白药:关于2026年特别分红方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-29",
+      "url": "https://data.eastmoney.com/notices/detail/000538/AN202608281828642473.html",
+      "source": "eastmoney_notice",
+      "name": "云南白药"
+    },
+    {
+      "code": "600398",
+      "art_code": "AN202608281828619627",
+      "title": "海澜之家:海澜之家集团股份有限公司2026年半年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-29",
+      "url": "https://data.eastmoney.com/notices/detail/600398/AN202608281828619627.html",
+      "source": "eastmoney_notice",
+      "name": "海澜之家"
+    },
+    {
+      "code": "601088",
+      "art_code": "AN202608281828644603",
+      "title": "中国神华:中国神华2026年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-29",
+      "url": "https://data.eastmoney.com/notices/detail/601088/AN202608281828644603.html",
+      "source": "eastmoney_notice",
+      "name": "中国神华"
+    },
+    {
+      "code": "601288",
+      "art_code": "AN202608281828630098",
+      "title": "农业银行:农业银行2026年度中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-29",
+      "url": "https://data.eastmoney.com/notices/detail/601288/AN202608281828630098.html",
+      "source": "eastmoney_notice",
+      "name": "农业银行"
+    },
+    {
+      "code": "601298",
+      "art_code": "AN202608281828618164",
+      "title": "青岛港:青岛港国际股份有限公司2026年中期利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-29",
+      "url": "https://data.eastmoney.com/notices/detail/601298/AN202608281828618164.html",
+      "source": "eastmoney_notice",
+      "name": "青岛港"
+    },
+    {
+      "code": "601398",
+      "art_code": "AN202608281828626874",
+      "title": "工商银行:工商银行2026年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-29",
+      "url": "https://data.eastmoney.com/notices/detail/601398/AN202608281828626874.html",
+      "source": "eastmoney_notice",
+      "name": "工商银行"
+    },
+    {
+      "code": "601919",
+      "art_code": "AN202608281828641150",
+      "title": "中远海控:中远海控2026年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-29",
+      "url": "https://data.eastmoney.com/notices/detail/601919/AN202608281828641150.html",
+      "source": "eastmoney_notice",
+      "name": "中远海控"
+    },
+    {
+      "code": "002027",
+      "art_code": "AN202608271828556712",
+      "title": "分众传媒:公司2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-08-28",
+      "url": "https://data.eastmoney.com/notices/detail/002027/AN202608271828556712.html",
+      "source": "eastmoney_notice",
+      "name": "分众传媒"
+    },
+    {
+      "code": "002027",
+      "art_code": "AN202608271828556724",
+      "title": "分众传媒:公司关于实施2026年半年度利润分配后发行股份及支付现金购买资产的股份发行价格和发行数量调整的公告",
+      "column": "增发方案修订",
+      "notice_date": "2026-08-28",
+      "url": "https://data.eastmoney.com/notices/detail/002027/AN202608271828556724.html",
+      "source": "eastmoney_notice",
+      "name": "分众传媒"
+    },
+    {
+      "code": "002032",
+      "art_code": "AN202608271828556881",
+      "title": "苏泊尔:浙江苏泊尔股份有限公司未来三年(2026-2028年)股东分红回报规划",
+      "column": "其他",
+      "notice_date": "2026-08-28",
+      "url": "https://data.eastmoney.com/notices/detail/002032/AN202608271828556881.html",
+      "source": "eastmoney_notice",
+      "name": "苏泊尔"
+    },
+    {
+      "code": "600377",
+      "art_code": "AN202608271828547490",
+      "title": "宁沪高速:2026年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-28",
+      "url": "https://data.eastmoney.com/notices/detail/600377/AN202608271828547490.html",
+      "source": "eastmoney_notice",
+      "name": "宁沪高速"
+    },
+    {
+      "code": "601225",
+      "art_code": "AN202608271828537836",
+      "title": "陕西煤业:陕西煤业股份有限公司关于2026年中期利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-28",
+      "url": "https://data.eastmoney.com/notices/detail/601225/AN202608271828537836.html",
+      "source": "eastmoney_notice",
+      "name": "陕西煤业"
+    },
+    {
+      "code": "601601",
+      "art_code": "AN202608271828544268",
+      "title": "中国太保:中国太保2026年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-28",
+      "url": "https://data.eastmoney.com/notices/detail/601601/AN202608271828544268.html",
+      "source": "eastmoney_notice",
+      "name": "中国太保"
+    },
+    {
+      "code": "600926",
+      "art_code": "AN202608261828500005",
+      "title": "杭州银行:杭州银行2026年度中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-27",
+      "url": "https://data.eastmoney.com/notices/detail/600926/AN202608261828500005.html",
+      "source": "eastmoney_notice",
+      "name": "杭州银行"
+    },
+    {
+      "code": "601838",
+      "art_code": "AN202608261828497681",
+      "title": "成都银行:成都银行股份有限公司2026年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-27",
+      "url": "https://data.eastmoney.com/notices/detail/601838/AN202608261828497681.html",
+      "source": "eastmoney_notice",
+      "name": "成都银行"
+    },
+    {
+      "code": "000423",
+      "art_code": "AN202608241828364708",
+      "title": "东阿阿胶:2026年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-08-25",
+      "url": "https://data.eastmoney.com/notices/detail/000423/AN202608241828364708.html",
+      "source": "eastmoney_notice",
+      "name": "东阿阿胶"
+    },
+    {
+      "code": "000999",
+      "art_code": "AN202608211828279165",
+      "title": "华润三九:关于公司2026年半年度权益分派预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-22",
+      "url": "https://data.eastmoney.com/notices/detail/000999/AN202608211828279165.html",
+      "source": "eastmoney_notice",
+      "name": "华润三九"
+    },
+    {
+      "code": "600750",
+      "art_code": "AN202608211828276040",
+      "title": "华润江中:华润江中关于2026年半年度利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-22",
+      "url": "https://data.eastmoney.com/notices/detail/600750/AN202608211828276040.html",
+      "source": "eastmoney_notice",
+      "name": "华润江中"
+    },
+    {
+      "code": "000423",
+      "art_code": "AN202608201828207637",
+      "title": "东阿阿胶:关于2026年中期利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-21",
+      "url": "https://data.eastmoney.com/notices/detail/000423/AN202608201828207637.html",
+      "source": "eastmoney_notice",
+      "name": "东阿阿胶"
+    },
+    {
+      "code": "000651",
+      "art_code": "AN202608201828215418",
+      "title": "格力电器:2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-08-21",
+      "url": "https://data.eastmoney.com/notices/detail/000651/AN202608201828215418.html",
+      "source": "eastmoney_notice",
+      "name": "格力电器"
+    },
+    {
+      "code": "000651",
+      "art_code": "AN202608201828215419",
+      "title": "格力电器:关于2025年年度权益分派实施后调整股份回购价格上限的公告",
+      "column": "回购方案修订",
+      "notice_date": "2026-08-21",
+      "url": "https://data.eastmoney.com/notices/detail/000651/AN202608201828215419.html",
+      "source": "eastmoney_notice",
+      "name": "格力电器"
+    },
+    {
+      "code": "601006",
+      "art_code": "AN202608201828209504",
+      "title": "大秦铁路:大秦铁路2026年半年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-21",
+      "url": "https://data.eastmoney.com/notices/detail/601006/AN202608201828209504.html",
+      "source": "eastmoney_notice",
+      "name": "大秦铁路"
+    },
+    {
+      "code": "601318",
+      "art_code": "AN202608201828216005",
+      "title": "中国平安:中国平安2026年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-21",
+      "url": "https://data.eastmoney.com/notices/detail/601318/AN202608201828216005.html",
+      "source": "eastmoney_notice",
+      "name": "中国平安"
+    },
+    {
+      "code": "601728",
+      "art_code": "AN202608201828204992",
+      "title": "中国电信:中国电信股份有限公司2026年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-21",
+      "url": "https://data.eastmoney.com/notices/detail/601728/AN202608201828204992.html",
+      "source": "eastmoney_notice",
+      "name": "中国电信"
+    },
+    {
+      "code": "000568",
+      "art_code": "AN202608191828161929",
+      "title": "泸州老窖:2025年度分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-08-20",
+      "url": "https://data.eastmoney.com/notices/detail/000568/AN202608191828161929.html",
+      "source": "eastmoney_notice",
+      "name": "泸州老窖"
+    },
+    {
+      "code": "002142",
+      "art_code": "AN202608191828161531",
+      "title": "宁波银行:宁波银行股份有限公司2026年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-20",
+      "url": "https://data.eastmoney.com/notices/detail/002142/AN202608191828161531.html",
+      "source": "eastmoney_notice",
+      "name": "宁波银行"
+    },
+    {
+      "code": "002027",
+      "art_code": "AN202608181828113477",
+      "title": "分众传媒:公司2026年半年度利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-19",
+      "url": "https://data.eastmoney.com/notices/detail/002027/AN202608181828113477.html",
+      "source": "eastmoney_notice",
+      "name": "分众传媒"
+    },
+    {
+      "code": "600660",
+      "art_code": "AN202608181828109735",
+      "title": "福耀玻璃:福耀玻璃2026年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-19",
+      "url": "https://data.eastmoney.com/notices/detail/600660/AN202608181828109735.html",
+      "source": "eastmoney_notice",
+      "name": "福耀玻璃"
+    },
+    {
+      "code": "000001",
+      "art_code": "AN202608141827992724",
+      "title": "平安银行:2026年中期利润分配方案",
+      "column": "分配预案",
+      "notice_date": "2026-08-15",
+      "url": "https://data.eastmoney.com/notices/detail/000001/AN202608141827992724.html",
+      "source": "eastmoney_notice",
+      "name": "平安银行"
+    },
+    {
+      "code": "600690",
+      "art_code": "AN202608141827989344",
+      "title": "海尔智家:海尔智家股份有限公司2025年年度A股权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-08-15",
+      "url": "https://data.eastmoney.com/notices/detail/600690/AN202608141827989344.html",
+      "source": "eastmoney_notice",
+      "name": "海尔智家"
+    },
+    {
+      "code": "600690",
+      "art_code": "AN202608141827989342",
+      "title": "海尔智家:北京市中伦律师事务所关于海尔智家股份有限公司差异化分红事项之专项法律意见",
+      "column": "法律意见书",
+      "notice_date": "2026-08-15",
+      "url": "https://data.eastmoney.com/notices/detail/600690/AN202608141827989342.html",
+      "source": "eastmoney_notice",
+      "name": "海尔智家"
+    },
+    {
+      "code": "600941",
+      "art_code": "AN202608131827943228",
+      "title": "中国移动:2026年中期利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-08-14",
+      "url": "https://data.eastmoney.com/notices/detail/600941/AN202608131827943228.html",
+      "source": "eastmoney_notice",
+      "name": "中国移动"
+    },
+    {
+      "code": "600690",
+      "art_code": "AN202608071827752856",
+      "title": "海尔智家:海尔智家股份有限公司关于2025年年度利润分配方案调整每股分配比例的公告",
+      "column": "分配方案调整",
+      "notice_date": "2026-08-08",
+      "url": "https://data.eastmoney.com/notices/detail/600690/AN202608071827752856.html",
+      "source": "eastmoney_notice",
+      "name": "海尔智家"
+    },
+    {
+      "code": "600377",
+      "art_code": "AN202608041827624141",
+      "title": "宁沪高速:关于公司董事会战略委员会提议实施2026年中期利润分配的提示性公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-08-05",
+      "url": "https://data.eastmoney.com/notices/detail/600377/AN202608041827624141.html",
+      "source": "eastmoney_notice",
+      "name": "宁沪高速"
+    },
+    {
+      "code": "601298",
+      "art_code": "AN202608021827567891",
+      "title": "青岛港:青岛港国际股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-08-03",
+      "url": "https://data.eastmoney.com/notices/detail/601298/AN202608021827567891.html",
+      "source": "eastmoney_notice",
+      "name": "青岛港"
+    },
+    {
+      "code": "000429",
+      "art_code": "AN202607301827490827",
+      "title": "粤高速Ａ:2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-31",
+      "url": "https://data.eastmoney.com/notices/detail/000429/AN202607301827490827.html",
+      "source": "eastmoney_notice",
+      "name": "粤高速A"
+    },
+    {
+      "code": "605499",
+      "art_code": "AN202607301827497240",
+      "title": "东鹏饮料:东鹏饮料(集团)股份有限公司关于2026年半年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-07-31",
+      "url": "https://data.eastmoney.com/notices/detail/605499/AN202607301827497240.html",
+      "source": "eastmoney_notice",
+      "name": "东鹏饮料"
+    },
+    {
+      "code": "605499",
+      "art_code": "AN202607301827497236",
+      "title": "东鹏饮料:东鹏饮料(集团)股份有限公司未来三年(2026年-2028年)股东分红回报规划的公告",
+      "column": "其他",
+      "notice_date": "2026-07-31",
+      "url": "https://data.eastmoney.com/notices/detail/605499/AN202607301827497236.html",
+      "source": "eastmoney_notice",
+      "name": "东鹏饮料"
+    },
+    {
+      "code": "600886",
+      "art_code": "AN202607291827456663",
+      "title": "国投电力:国投电力控股股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-30",
+      "url": "https://data.eastmoney.com/notices/detail/600886/AN202607291827456663.html",
+      "source": "eastmoney_notice",
+      "name": "国投电力"
+    },
+    {
+      "code": "600809",
+      "art_code": "AN202607261827354810",
+      "title": "山西汾酒:2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-27",
+      "url": "https://data.eastmoney.com/notices/detail/600809/AN202607261827354810.html",
+      "source": "eastmoney_notice",
+      "name": "山西汾酒"
+    },
+    {
+      "code": "000858",
+      "art_code": "AN202607151826995006",
+      "title": "五粮液:关于2025年度分红派息实施后调整回购股份价格上限的公告",
+      "column": "回购方案修订",
+      "notice_date": "2026-07-16",
+      "url": "https://data.eastmoney.com/notices/detail/000858/AN202607151826995006.html",
+      "source": "eastmoney_notice",
+      "name": "五粮液"
+    },
+    {
+      "code": "000858",
+      "art_code": "AN202607091826850562",
+      "title": "五粮液:2025年度分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-10",
+      "url": "https://data.eastmoney.com/notices/detail/000858/AN202607091826850562.html",
+      "source": "eastmoney_notice",
+      "name": "五粮液"
+    },
+    {
+      "code": "600900",
+      "art_code": "AN202607091826845795",
+      "title": "长江电力:长江电力2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-10",
+      "url": "https://data.eastmoney.com/notices/detail/600900/AN202607091826845795.html",
+      "source": "eastmoney_notice",
+      "name": "长江电力"
+    },
+    {
+      "code": "002142",
+      "art_code": "AN202607081826820118",
+      "title": "宁波银行:宁波银行股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-09",
+      "url": "https://data.eastmoney.com/notices/detail/002142/AN202607081826820118.html",
+      "source": "eastmoney_notice",
+      "name": "宁波银行"
+    },
+    {
+      "code": "600600",
+      "art_code": "AN202607081826816637",
+      "title": "青岛啤酒:青岛啤酒股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-09",
+      "url": "https://data.eastmoney.com/notices/detail/600600/AN202607081826816637.html",
+      "source": "eastmoney_notice",
+      "name": "青岛啤酒"
+    },
+    {
+      "code": "601601",
+      "art_code": "AN202607081826815846",
+      "title": "中国太保:中国太保2025年年度分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-09",
+      "url": "https://data.eastmoney.com/notices/detail/601601/AN202607081826815846.html",
+      "source": "eastmoney_notice",
+      "name": "中国太保"
+    },
+    {
+      "code": "601838",
+      "art_code": "AN202607061826749681",
+      "title": "成都银行:成都银行股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-07",
+      "url": "https://data.eastmoney.com/notices/detail/601838/AN202607061826749681.html",
+      "source": "eastmoney_notice",
+      "name": "成都银行"
+    },
+    {
+      "code": "601088",
+      "art_code": "AN202607051826728133",
+      "title": "中国神华:中国神华2025年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-06",
+      "url": "https://data.eastmoney.com/notices/detail/601088/AN202607051826728133.html",
+      "source": "eastmoney_notice",
+      "name": "中国神华"
+    },
+    {
+      "code": "600036",
+      "art_code": "AN202607031826699619",
+      "title": "招商银行:招商银行股份有限公司2025年年度A股分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-04",
+      "url": "https://data.eastmoney.com/notices/detail/600036/AN202607031826699619.html",
+      "source": "eastmoney_notice",
+      "name": "招商银行"
+    },
+    {
+      "code": "600377",
+      "art_code": "AN202607031826701194",
+      "title": "宁沪高速:2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-04",
+      "url": "https://data.eastmoney.com/notices/detail/600377/AN202607031826701194.html",
+      "source": "eastmoney_notice",
+      "name": "宁沪高速"
+    },
+    {
+      "code": "600919",
+      "art_code": "AN202607031826699359",
+      "title": "江苏银行:江苏银行2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-04",
+      "url": "https://data.eastmoney.com/notices/detail/600919/AN202607031826699359.html",
+      "source": "eastmoney_notice",
+      "name": "江苏银行"
+    },
+    {
+      "code": "601006",
+      "art_code": "AN202607021826663367",
+      "title": "大秦铁路:大秦铁路2025年末期权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-03",
+      "url": "https://data.eastmoney.com/notices/detail/601006/AN202607021826663367.html",
+      "source": "eastmoney_notice",
+      "name": "大秦铁路"
+    },
+    {
+      "code": "002027",
+      "art_code": "AN202607011826636235",
+      "title": "分众传媒:公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-07-02",
+      "url": "https://data.eastmoney.com/notices/detail/002027/AN202607011826636235.html",
+      "source": "eastmoney_notice",
+      "name": "分众传媒"
+    },
+    {
+      "code": "002027",
+      "art_code": "AN202607011826636233",
+      "title": "分众传媒:公司关于实施2025年度利润分配后发行股份及支付现金购买资产的股份发行价格和发行数量调整的公告",
+      "column": "增发方案修订",
+      "notice_date": "2026-07-02",
+      "url": "https://data.eastmoney.com/notices/detail/002027/AN202607011826636233.html",
+      "source": "eastmoney_notice",
+      "name": "分众传媒"
+    },
+    {
+      "code": "600566",
+      "art_code": "AN202606231823772421",
+      "title": "济川药业:湖北济川药业股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-24",
+      "url": "https://data.eastmoney.com/notices/detail/600566/AN202606231823772421.html",
+      "source": "eastmoney_notice",
+      "name": "济川药业"
+    },
+    {
+      "code": "600566",
+      "art_code": "AN202606231823772420",
+      "title": "济川药业:北京植德律师事务所关于湖北济川药业股份有限公司差异化分红事项的法律意见书",
+      "column": "法律意见书",
+      "notice_date": "2026-06-24",
+      "url": "https://data.eastmoney.com/notices/detail/600566/AN202606231823772420.html",
+      "source": "eastmoney_notice",
+      "name": "济川药业"
+    },
+    {
+      "code": "600566",
+      "art_code": "AN202606231823772416",
+      "title": "济川药业:湖北济川药业股份有限公司关于2025年年度权益分派实施后调整回购价格上限的公告",
+      "column": "回购方案修订",
+      "notice_date": "2026-06-24",
+      "url": "https://data.eastmoney.com/notices/detail/600566/AN202606231823772416.html",
+      "source": "eastmoney_notice",
+      "name": "济川药业"
+    },
+    {
+      "code": "601006",
+      "art_code": "AN202606231823771678",
+      "title": "大秦铁路:大秦铁路股份有限公司关于调整2025年度利润分配方案每股分红金额的公告",
+      "column": "分配方案调整",
+      "notice_date": "2026-06-24",
+      "url": "https://data.eastmoney.com/notices/detail/601006/AN202606231823771678.html",
+      "source": "eastmoney_notice",
+      "name": "大秦铁路"
+    },
+    {
+      "code": "000333",
+      "art_code": "AN202606221823745067",
+      "title": "美的集团:2025年度A股利润分配实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-23",
+      "url": "https://data.eastmoney.com/notices/detail/000333/AN202606221823745067.html",
+      "source": "eastmoney_notice",
+      "name": "美的集团"
+    },
+    {
+      "code": "600519",
+      "art_code": "AN202606211823708334",
+      "title": "贵州茅台:贵州茅台2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-22",
+      "url": "https://data.eastmoney.com/notices/detail/600519/AN202606211823708334.html",
+      "source": "eastmoney_notice",
+      "name": "贵州茅台"
+    },
+    {
+      "code": "601857",
+      "art_code": "AN202606211823708365",
+      "title": "中国石油:中国石油天然气股份有限公司2025年年度A股权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-22",
+      "url": "https://data.eastmoney.com/notices/detail/601857/AN202606211823708365.html",
+      "source": "eastmoney_notice",
+      "name": "中国石油"
+    },
+    {
+      "code": "601225",
+      "art_code": "AN202606181823666035",
+      "title": "陕西煤业:陕西煤业股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-19",
+      "url": "https://data.eastmoney.com/notices/detail/601225/AN202606181823666035.html",
+      "source": "eastmoney_notice",
+      "name": "陕西煤业"
+    },
+    {
+      "code": "601919",
+      "art_code": "AN202606171823637058",
+      "title": "中远海控:中远海控2025年末期权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-18",
+      "url": "https://data.eastmoney.com/notices/detail/601919/AN202606171823637058.html",
+      "source": "eastmoney_notice",
+      "name": "中远海控"
+    },
+    {
+      "code": "600750",
+      "art_code": "AN202606121823510751",
+      "title": "华润江中:华润江中2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-13",
+      "url": "https://data.eastmoney.com/notices/detail/600750/AN202606121823510751.html",
+      "source": "eastmoney_notice",
+      "name": "华润江中"
+    },
+    {
+      "code": "600350",
+      "art_code": "AN202606111823458429",
+      "title": "山东高速:山东高速股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-12",
+      "url": "https://data.eastmoney.com/notices/detail/600350/AN202606111823458429.html",
+      "source": "eastmoney_notice",
+      "name": "山东高速"
+    },
+    {
+      "code": "600132",
+      "art_code": "AN202606101823424397",
+      "title": "重庆啤酒:重庆啤酒股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-11",
+      "url": "https://data.eastmoney.com/notices/detail/600132/AN202606101823424397.html",
+      "source": "eastmoney_notice",
+      "name": "重庆啤酒"
+    },
+    {
+      "code": "600926",
+      "art_code": "AN202606081823360347",
+      "title": "杭州银行:杭州银行2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-09",
+      "url": "https://data.eastmoney.com/notices/detail/600926/AN202606081823360347.html",
+      "source": "eastmoney_notice",
+      "name": "杭州银行"
+    },
+    {
+      "code": "601166",
+      "art_code": "AN202606071823340949",
+      "title": "兴业银行:兴业银行2025年年度A股权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-08",
+      "url": "https://data.eastmoney.com/notices/detail/601166/AN202606071823340949.html",
+      "source": "eastmoney_notice",
+      "name": "兴业银行"
+    },
+    {
+      "code": "601166",
+      "art_code": "AN202606071823340954",
+      "title": "兴业银行:兴业银行关于根据2025年度利润分配方案调整A股可转换公司债券转股价格的公告",
+      "column": "其他",
+      "notice_date": "2026-06-08",
+      "url": "https://data.eastmoney.com/notices/detail/601166/AN202606071823340954.html",
+      "source": "eastmoney_notice",
+      "name": "兴业银行"
+    },
+    {
+      "code": "000001",
+      "art_code": "AN202606041823255245",
+      "title": "平安银行:2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-05",
+      "url": "https://data.eastmoney.com/notices/detail/000001/AN202606041823255245.html",
+      "source": "eastmoney_notice",
+      "name": "平安银行"
+    },
+    {
+      "code": "603288",
+      "art_code": "AN202606041823255290",
+      "title": "海天味业:关于佛山市海天调味食品股份有限公司差异化分红之法律意见书",
+      "column": "法律意见书",
+      "notice_date": "2026-06-05",
+      "url": "https://data.eastmoney.com/notices/detail/603288/AN202606041823255290.html",
+      "source": "eastmoney_notice",
+      "name": "海天味业"
+    },
+    {
+      "code": "603288",
+      "art_code": "AN202606041823255285",
+      "title": "海天味业:海天味业2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-05",
+      "url": "https://data.eastmoney.com/notices/detail/603288/AN202606041823255285.html",
+      "source": "eastmoney_notice",
+      "name": "海天味业"
+    },
+    {
+      "code": "600519",
+      "art_code": "AN202606021823169141",
+      "title": "贵州茅台:贵州茅台关于调整2025年年度利润分配方案每股分红金额的公告",
+      "column": "分配方案调整",
+      "notice_date": "2026-06-03",
+      "url": "https://data.eastmoney.com/notices/detail/600519/AN202606021823169141.html",
+      "source": "eastmoney_notice",
+      "name": "贵州茅台"
+    },
+    {
+      "code": "601728",
+      "art_code": "AN202606021823166987",
+      "title": "中国电信:中国电信股份有限公司2025年年度A股利润分配实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-03",
+      "url": "https://data.eastmoney.com/notices/detail/601728/AN202606021823166987.html",
+      "source": "eastmoney_notice",
+      "name": "中国电信"
+    },
+    {
+      "code": "601166",
+      "art_code": "AN202606011823128419",
+      "title": "兴业银行:兴业银行关于实施2025年年度A股权益分派时“兴业转债”停止转股的提示性公告",
+      "column": "其他",
+      "notice_date": "2026-06-02",
+      "url": "https://data.eastmoney.com/notices/detail/601166/AN202606011823128419.html",
+      "source": "eastmoney_notice",
+      "name": "兴业银行"
+    },
+    {
+      "code": "601318",
+      "art_code": "AN202606011823126861",
+      "title": "中国平安:中国平安2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-06-02",
+      "url": "https://data.eastmoney.com/notices/detail/601318/AN202606011823126861.html",
+      "source": "eastmoney_notice",
+      "name": "中国平安"
+    },
+    {
+      "code": "600887",
+      "art_code": "AN202605281822947781",
+      "title": "伊利股份:内蒙古伊利实业集团股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-29",
+      "url": "https://data.eastmoney.com/notices/detail/600887/AN202605281822947781.html",
+      "source": "eastmoney_notice",
+      "name": "伊利股份"
+    },
+    {
+      "code": "000848",
+      "art_code": "AN202605211822646498",
+      "title": "承德露露:2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-22",
+      "url": "https://data.eastmoney.com/notices/detail/000848/AN202605211822646498.html",
+      "source": "eastmoney_notice",
+      "name": "承德露露"
+    },
+    {
+      "code": "000999",
+      "art_code": "AN202605201822499096",
+      "title": "华润三九:2025年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-21",
+      "url": "https://data.eastmoney.com/notices/detail/000999/AN202605201822499096.html",
+      "source": "eastmoney_notice",
+      "name": "华润三九"
+    },
+    {
+      "code": "002032",
+      "art_code": "AN202605201822501816",
+      "title": "苏泊尔:2025年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-21",
+      "url": "https://data.eastmoney.com/notices/detail/002032/AN202605201822501816.html",
+      "source": "eastmoney_notice",
+      "name": "苏泊尔"
+    },
+    {
+      "code": "600941",
+      "art_code": "AN202605201822495865",
+      "title": "中国移动:2025年末期利润分配方案的进展公告",
+      "column": "分配预案",
+      "notice_date": "2026-05-21",
+      "url": "https://data.eastmoney.com/notices/detail/600941/AN202605201822495865.html",
+      "source": "eastmoney_notice",
+      "name": "中国移动"
+    },
+    {
+      "code": "601000",
+      "art_code": "AN202605191822449407",
+      "title": "唐山港:唐山港集团股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-20",
+      "url": "https://data.eastmoney.com/notices/detail/601000/AN202605191822449407.html",
+      "source": "eastmoney_notice",
+      "name": "唐山港"
+    },
+    {
+      "code": "000423",
+      "art_code": "AN202605181822401825",
+      "title": "东阿阿胶:2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-19",
+      "url": "https://data.eastmoney.com/notices/detail/000423/AN202605181822401825.html",
+      "source": "eastmoney_notice",
+      "name": "东阿阿胶"
+    },
+    {
+      "code": "605499",
+      "art_code": "AN202605111822165587",
+      "title": "东鹏饮料:东鹏饮料(集团)股份有限公司2025年年度A股权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-12",
+      "url": "https://data.eastmoney.com/notices/detail/605499/AN202605111822165587.html",
+      "source": "eastmoney_notice",
+      "name": "东鹏饮料"
+    },
+    {
+      "code": "605499",
+      "art_code": "AN202605111822165586",
+      "title": "东鹏饮料:东鹏饮料(集团)股份有限公司关于2025年年度权益分派实施后调整回购价格上限的公告",
+      "column": "回购方案修订",
+      "notice_date": "2026-05-12",
+      "url": "https://data.eastmoney.com/notices/detail/605499/AN202605111822165586.html",
+      "source": "eastmoney_notice",
+      "name": "东鹏饮料"
+    },
+    {
+      "code": "600066",
+      "art_code": "AN202605081822071960",
+      "title": "宇通客车:2025年年度利润分配实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-09",
+      "url": "https://data.eastmoney.com/notices/detail/600066/AN202605081822071960.html",
+      "source": "eastmoney_notice",
+      "name": "宇通客车"
+    },
+    {
+      "code": "601288",
+      "art_code": "AN202605061821991178",
+      "title": "农业银行:农业银行2025年年度A股分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-07",
+      "url": "https://data.eastmoney.com/notices/detail/601288/AN202605061821991178.html",
+      "source": "eastmoney_notice",
+      "name": "农业银行"
+    },
+    {
+      "code": "601398",
+      "art_code": "AN202605061821991182",
+      "title": "工商银行:工商银行A股2025年年度分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-07",
+      "url": "https://data.eastmoney.com/notices/detail/601398/AN202605061821991182.html",
+      "source": "eastmoney_notice",
+      "name": "工商银行"
+    },
+    {
+      "code": "600660",
+      "art_code": "AN202604301821838910",
+      "title": "福耀玻璃:福耀玻璃2025年度A股权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-05-01",
+      "url": "https://data.eastmoney.com/notices/detail/600660/AN202604301821838910.html",
+      "source": "eastmoney_notice",
+      "name": "福耀玻璃"
+    },
+    {
+      "code": "000858",
+      "art_code": "AN202604301821851559",
+      "title": "五粮液:关于提请股东会授权董事会制定2026年中期分红方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-30",
+      "url": "https://data.eastmoney.com/notices/detail/000858/AN202604301821851559.html",
+      "source": "eastmoney_notice",
+      "name": "五粮液"
+    },
+    {
+      "code": "000858",
+      "art_code": "AN202604301821851573",
+      "title": "五粮液:关于2025年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-30",
+      "url": "https://data.eastmoney.com/notices/detail/000858/AN202604301821851573.html",
+      "source": "eastmoney_notice",
+      "name": "五粮液"
+    },
+    {
+      "code": "600398",
+      "art_code": "AN202604291821765174",
+      "title": "海澜之家:海澜之家集团股份有限公司关于2026年度中期现金分红规划的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-30",
+      "url": "https://data.eastmoney.com/notices/detail/600398/AN202604291821765174.html",
+      "source": "eastmoney_notice",
+      "name": "海澜之家"
+    },
+    {
+      "code": "600398",
+      "art_code": "AN202604291821765172",
+      "title": "海澜之家:海澜之家集团股份有限公司2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-04-30",
+      "url": "https://data.eastmoney.com/notices/detail/600398/AN202604291821765172.html",
+      "source": "eastmoney_notice",
+      "name": "海澜之家"
+    },
+    {
+      "code": "600886",
+      "art_code": "AN202604291821752298",
+      "title": "国投电力:国投电力控股股份有限公司关于2025年年度利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-30",
+      "url": "https://data.eastmoney.com/notices/detail/600886/AN202604291821752298.html",
+      "source": "eastmoney_notice",
+      "name": "国投电力"
+    },
+    {
+      "code": "600887",
+      "art_code": "AN202604291821755624",
+      "title": "伊利股份:内蒙古伊利实业集团股份有限公司关于2025年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-30",
+      "url": "https://data.eastmoney.com/notices/detail/600887/AN202604291821755624.html",
+      "source": "eastmoney_notice",
+      "name": "伊利股份"
+    },
+    {
+      "code": "600900",
+      "art_code": "AN202604291821763565",
+      "title": "长江电力:长江电力2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-30",
+      "url": "https://data.eastmoney.com/notices/detail/600900/AN202604291821763565.html",
+      "source": "eastmoney_notice",
+      "name": "长江电力"
+    },
+    {
+      "code": "601006",
+      "art_code": "AN202604291821752786",
+      "title": "大秦铁路:大秦铁路2025年年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-30",
+      "url": "https://data.eastmoney.com/notices/detail/601006/AN202604291821752786.html",
+      "source": "eastmoney_notice",
+      "name": "大秦铁路"
+    },
+    {
+      "code": "601298",
+      "art_code": "AN202604291821739899",
+      "title": "青岛港:青岛港国际股份有限公司关于提请股东会授权董事会制定2026年度中期利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-30",
+      "url": "https://data.eastmoney.com/notices/detail/601298/AN202604291821739899.html",
+      "source": "eastmoney_notice",
+      "name": "青岛港"
+    },
+    {
+      "code": "000568",
+      "art_code": "AN202604281821699996",
+      "title": "泸州老窖:关于提请股东会授权董事会制定中期分红方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-29",
+      "url": "https://data.eastmoney.com/notices/detail/000568/AN202604281821699996.html",
+      "source": "eastmoney_notice",
+      "name": "泸州老窖"
+    },
+    {
+      "code": "000568",
+      "art_code": "AN202604281821700007",
+      "title": "泸州老窖:2025年度利润分配预案",
+      "column": "分配预案",
+      "notice_date": "2026-04-29",
+      "url": "https://data.eastmoney.com/notices/detail/000568/AN202604281821700007.html",
+      "source": "eastmoney_notice",
+      "name": "泸州老窖"
+    },
+    {
+      "code": "000651",
+      "art_code": "AN202604281821712628",
+      "title": "格力电器:2025年年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-29",
+      "url": "https://data.eastmoney.com/notices/detail/000651/AN202604281821712628.html",
+      "source": "eastmoney_notice",
+      "name": "格力电器"
+    },
+    {
+      "code": "002027",
+      "art_code": "AN202604291821715396",
+      "title": "分众传媒:2026-015公司2025年度利润分配方案及2026年中期利润分配",
+      "column": "分配预案",
+      "notice_date": "2026-04-29",
+      "url": "https://data.eastmoney.com/notices/detail/002027/AN202604291821715396.html",
+      "source": "eastmoney_notice",
+      "name": "分众传媒"
+    },
+    {
+      "code": "600919",
+      "art_code": "AN202604281821702484",
+      "title": "江苏银行:江苏银行2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-29",
+      "url": "https://data.eastmoney.com/notices/detail/600919/AN202604281821702484.html",
+      "source": "eastmoney_notice",
+      "name": "江苏银行"
+    },
+    {
+      "code": "000848",
+      "art_code": "AN202604271821630307",
+      "title": "承德露露:关于2025年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-28",
+      "url": "https://data.eastmoney.com/notices/detail/000848/AN202604271821630307.html",
+      "source": "eastmoney_notice",
+      "name": "承德露露"
+    },
+    {
+      "code": "002142",
+      "art_code": "AN202604241821564089",
+      "title": "宁波银行:宁波银行股份有限公司2025年度利润分配预案公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-25",
+      "url": "https://data.eastmoney.com/notices/detail/002142/AN202604241821564089.html",
+      "source": "eastmoney_notice",
+      "name": "宁波银行"
+    },
+    {
+      "code": "601225",
+      "art_code": "AN202604241821544476",
+      "title": "陕西煤业:陕西煤业股份有限公司关于2025年年度利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-25",
+      "url": "https://data.eastmoney.com/notices/detail/601225/AN202604241821544476.html",
+      "source": "eastmoney_notice",
+      "name": "陕西煤业"
+    },
+    {
+      "code": "000538",
+      "art_code": "AN202604231821501924",
+      "title": "云南白药:2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-04-24",
+      "url": "https://data.eastmoney.com/notices/detail/000538/AN202604231821501924.html",
+      "source": "eastmoney_notice",
+      "name": "云南白药"
+    },
+    {
+      "code": "600809",
+      "art_code": "AN202604221821466491",
+      "title": "山西汾酒:关于2025-2027年度股东分红回报规划的公告",
+      "column": "其他",
+      "notice_date": "2026-04-23",
+      "url": "https://data.eastmoney.com/notices/detail/600809/AN202604221821466491.html",
+      "source": "eastmoney_notice",
+      "name": "山西汾酒"
+    },
+    {
+      "code": "600809",
+      "art_code": "AN202604221821466484",
+      "title": "山西汾酒:关于2025年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-23",
+      "url": "https://data.eastmoney.com/notices/detail/600809/AN202604221821466484.html",
+      "source": "eastmoney_notice",
+      "name": "山西汾酒"
+    },
+    {
+      "code": "600926",
+      "art_code": "AN202604221821467213",
+      "title": "杭州银行:杭州银行2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-23",
+      "url": "https://data.eastmoney.com/notices/detail/600926/AN202604221821467213.html",
+      "source": "eastmoney_notice",
+      "name": "杭州银行"
+    },
+    {
+      "code": "601838",
+      "art_code": "AN202604221821462027",
+      "title": "成都银行:成都银行股份有限公司2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-23",
+      "url": "https://data.eastmoney.com/notices/detail/601838/AN202604221821462027.html",
+      "source": "eastmoney_notice",
+      "name": "成都银行"
+    },
+    {
+      "code": "000895",
+      "art_code": "AN202604201821340813",
+      "title": "双汇发展:2025年年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-04-21",
+      "url": "https://data.eastmoney.com/notices/detail/000895/AN202604201821340813.html",
+      "source": "eastmoney_notice",
+      "name": "双汇发展"
+    },
+    {
+      "code": "600519",
+      "art_code": "AN202604161821275629",
+      "title": "贵州茅台:贵州茅台关于2025年年度利润分配方案及2026年中期利润分配安排的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-17",
+      "url": "https://data.eastmoney.com/notices/detail/600519/AN202604161821275629.html",
+      "source": "eastmoney_notice",
+      "name": "贵州茅台"
+    },
+    {
+      "code": "600350",
+      "art_code": "AN202604031821015404",
+      "title": "山东高速:山东高速股份有限公司2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-04",
+      "url": "https://data.eastmoney.com/notices/detail/600350/AN202604031821015404.html",
+      "source": "eastmoney_notice",
+      "name": "山东高速"
+    },
+    {
+      "code": "002032",
+      "art_code": "AN202604021820988739",
+      "title": "苏泊尔:关于2025年度利润分配的公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-03",
+      "url": "https://data.eastmoney.com/notices/detail/002032/AN202604021820988739.html",
+      "source": "eastmoney_notice",
+      "name": "苏泊尔"
+    },
+    {
+      "code": "000538",
+      "art_code": "AN202603311820922879",
+      "title": "云南白药:2025年度利润分配预案公告",
+      "column": "分配预案",
+      "notice_date": "2026-04-01",
+      "url": "https://data.eastmoney.com/notices/detail/000538/AN202603311820922879.html",
+      "source": "eastmoney_notice",
+      "name": "云南白药"
+    },
+    {
+      "code": "600066",
+      "art_code": "AN202603301820856966",
+      "title": "宇通客车:关于2025年度利润分配方案及2026年中期分红授权的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-31",
+      "url": "https://data.eastmoney.com/notices/detail/600066/AN202603301820856966.html",
+      "source": "eastmoney_notice",
+      "name": "宇通客车"
+    },
+    {
+      "code": "601088",
+      "art_code": "AN202603301820880241",
+      "title": "中国神华:中国神华2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-31",
+      "url": "https://data.eastmoney.com/notices/detail/601088/AN202603301820880241.html",
+      "source": "eastmoney_notice",
+      "name": "中国神华"
+    },
+    {
+      "code": "601288",
+      "art_code": "AN202603301820865881",
+      "title": "农业银行:农业银行2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-31",
+      "url": "https://data.eastmoney.com/notices/detail/601288/AN202603301820865881.html",
+      "source": "eastmoney_notice",
+      "name": "农业银行"
+    },
+    {
+      "code": "605499",
+      "art_code": "AN202603301820877781",
+      "title": "东鹏饮料:东鹏饮料(集团)股份有限公司关于2025年年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-31",
+      "url": "https://data.eastmoney.com/notices/detail/605499/AN202603301820877781.html",
+      "source": "eastmoney_notice",
+      "name": "东鹏饮料"
+    },
+    {
+      "code": "600377",
+      "art_code": "AN202603291820837007",
+      "title": "宁沪高速:2025年年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-30",
+      "url": "https://data.eastmoney.com/notices/detail/600377/AN202603291820837007.html",
+      "source": "eastmoney_notice",
+      "name": "宁沪高速"
+    },
+    {
+      "code": "601857",
+      "art_code": "AN202603291820836924",
+      "title": "中国石油:中国石油天然气股份有限公司2025年末期A股利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-30",
+      "url": "https://data.eastmoney.com/notices/detail/601857/AN202603291820836924.html",
+      "source": "eastmoney_notice",
+      "name": "中国石油"
+    },
+    {
+      "code": "600036",
+      "art_code": "AN202603271820811727",
+      "title": "招商银行:招商银行股份有限公司2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-28",
+      "url": "https://data.eastmoney.com/notices/detail/600036/AN202603271820811727.html",
+      "source": "eastmoney_notice",
+      "name": "招商银行"
+    },
+    {
+      "code": "600398",
+      "art_code": "AN202603271820804234",
+      "title": "海澜之家:海澜之家集团股份有限公司2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-28",
+      "url": "https://data.eastmoney.com/notices/detail/600398/AN202603271820804234.html",
+      "source": "eastmoney_notice",
+      "name": "海澜之家"
+    },
+    {
+      "code": "601000",
+      "art_code": "AN202603271820801144",
+      "title": "唐山港:唐山港集团股份有限公司2025年年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-28",
+      "url": "https://data.eastmoney.com/notices/detail/601000/AN202603271820801144.html",
+      "source": "eastmoney_notice",
+      "name": "唐山港"
+    },
+    {
+      "code": "601298",
+      "art_code": "AN202603271820801980",
+      "title": "青岛港:青岛港国际股份有限公司2025年度利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-28",
+      "url": "https://data.eastmoney.com/notices/detail/601298/AN202603271820801980.html",
+      "source": "eastmoney_notice",
+      "name": "青岛港"
+    },
+    {
+      "code": "601398",
+      "art_code": "AN202603271820813798",
+      "title": "工商银行:工商银行2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-28",
+      "url": "https://data.eastmoney.com/notices/detail/601398/AN202603271820813798.html",
+      "source": "eastmoney_notice",
+      "name": "工商银行"
+    },
+    {
+      "code": "600600",
+      "art_code": "AN202603261820773195",
+      "title": "青岛啤酒:青岛啤酒股份有限公司关于2025年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-27",
+      "url": "https://data.eastmoney.com/notices/detail/600600/AN202603261820773195.html",
+      "source": "eastmoney_notice",
+      "name": "青岛啤酒"
+    },
+    {
+      "code": "600690",
+      "art_code": "AN202603261820776761",
+      "title": "海尔智家:海尔智家股份有限公司关于提请股东会授权董事会制定2026年中期分红方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-27",
+      "url": "https://data.eastmoney.com/notices/detail/600690/AN202603261820776761.html",
+      "source": "eastmoney_notice",
+      "name": "海尔智家"
+    },
+    {
+      "code": "600690",
+      "art_code": "AN202603261820776747",
+      "title": "海尔智家:海尔智家股份有限公司关于2025年年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-27",
+      "url": "https://data.eastmoney.com/notices/detail/600690/AN202603261820776747.html",
+      "source": "eastmoney_notice",
+      "name": "海尔智家"
+    },
+    {
+      "code": "600941",
+      "art_code": "AN202603261820773198",
+      "title": "中国移动:2025年末期利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-27",
+      "url": "https://data.eastmoney.com/notices/detail/600941/AN202603261820773198.html",
+      "source": "eastmoney_notice",
+      "name": "中国移动"
+    },
+    {
+      "code": "601166",
+      "art_code": "AN202603261820778789",
+      "title": "兴业银行:兴业银行2025年年度利润分配预案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-27",
+      "url": "https://data.eastmoney.com/notices/detail/601166/AN202603261820778789.html",
+      "source": "eastmoney_notice",
+      "name": "兴业银行"
+    },
+    {
+      "code": "601318",
+      "art_code": "AN202603261820776819",
+      "title": "中国平安:中国平安2025年年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-27",
+      "url": "https://data.eastmoney.com/notices/detail/601318/AN202603261820776819.html",
+      "source": "eastmoney_notice",
+      "name": "中国平安"
+    },
+    {
+      "code": "601601",
+      "art_code": "AN202603261820771796",
+      "title": "中国太保:中国太保2025年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-27",
+      "url": "https://data.eastmoney.com/notices/detail/601601/AN202603261820771796.html",
+      "source": "eastmoney_notice",
+      "name": "中国太保"
+    },
+    {
+      "code": "603288",
+      "art_code": "AN202603261820776574",
+      "title": "海天味业:海天味业2025年度利润分配预案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-27",
+      "url": "https://data.eastmoney.com/notices/detail/603288/AN202603261820776574.html",
+      "source": "eastmoney_notice",
+      "name": "海天味业"
+    },
+    {
+      "code": "000895",
+      "art_code": "AN202603241820725648",
+      "title": "双汇发展:关于提请股东会授权董事会制定并执行2026年中期分红方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-25",
+      "url": "https://data.eastmoney.com/notices/detail/000895/AN202603241820725648.html",
+      "source": "eastmoney_notice",
+      "name": "双汇发展"
+    },
+    {
+      "code": "000895",
+      "art_code": "AN202603241820725651",
+      "title": "双汇发展:关于2025年度利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-25",
+      "url": "https://data.eastmoney.com/notices/detail/000895/AN202603241820725651.html",
+      "source": "eastmoney_notice",
+      "name": "双汇发展"
+    },
+    {
+      "code": "601728",
+      "art_code": "AN202603241820721498",
+      "title": "中国电信:中国电信股份有限公司2025年年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-25",
+      "url": "https://data.eastmoney.com/notices/detail/601728/AN202603241820721498.html",
+      "source": "eastmoney_notice",
+      "name": "中国电信"
+    },
+    {
+      "code": "000001",
+      "art_code": "AN202603201820674747",
+      "title": "平安银行:2025年度利润分配预案公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-21",
+      "url": "https://data.eastmoney.com/notices/detail/000001/AN202603201820674747.html",
+      "source": "eastmoney_notice",
+      "name": "平安银行"
+    },
+    {
+      "code": "000999",
+      "art_code": "AN202603201820674765",
+      "title": "华润三九:关于公司2025年度权益分派预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-21",
+      "url": "https://data.eastmoney.com/notices/detail/000999/AN202603201820674765.html",
+      "source": "eastmoney_notice",
+      "name": "华润三九"
+    },
+    {
+      "code": "000423",
+      "art_code": "AN202603191820652064",
+      "title": "东阿阿胶:关于2025年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-20",
+      "url": "https://data.eastmoney.com/notices/detail/000423/AN202603191820652064.html",
+      "source": "eastmoney_notice",
+      "name": "东阿阿胶"
+    },
+    {
+      "code": "600750",
+      "art_code": "AN202603191820647805",
+      "title": "华润江中:华润江中关于2025年年度利润分配方案及2026年中期利润分配授权安排的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-20",
+      "url": "https://data.eastmoney.com/notices/detail/600750/AN202603191820647805.html",
+      "source": "eastmoney_notice",
+      "name": "华润江中"
+    },
+    {
+      "code": "601919",
+      "art_code": "AN202603191820651976",
+      "title": "中远海控:中远海控2025年末期利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-20",
+      "url": "https://data.eastmoney.com/notices/detail/601919/AN202603191820651976.html",
+      "source": "eastmoney_notice",
+      "name": "中远海控"
+    },
+    {
+      "code": "600660",
+      "art_code": "AN202603171820602570",
+      "title": "福耀玻璃:福耀玻璃2025年度利润分配方案及提请股东会授权董事局制定2026年中期分红方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-18",
+      "url": "https://data.eastmoney.com/notices/detail/600660/AN202603171820602570.html",
+      "source": "eastmoney_notice",
+      "name": "福耀玻璃"
+    },
+    {
+      "code": "000429",
+      "art_code": "AN202603131820553534",
+      "title": "粤高速Ａ:关于2025年度利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-14",
+      "url": "https://data.eastmoney.com/notices/detail/000429/AN202603131820553534.html",
+      "source": "eastmoney_notice",
+      "name": "粤高速A"
+    },
+    {
+      "code": "600132",
+      "art_code": "AN202603101820465267",
+      "title": "重庆啤酒:重庆啤酒股份有限公司关于2025年度利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2026-03-11",
+      "url": "https://data.eastmoney.com/notices/detail/600132/AN202603101820465267.html",
+      "source": "eastmoney_notice",
+      "name": "重庆啤酒"
+    },
+    {
+      "code": "600900",
+      "art_code": "AN202602261820059019",
+      "title": "长江电力:长江电力关于2025年度利润分配预案相关事项征求投资者意见的公告",
+      "column": "其他",
+      "notice_date": "2026-02-27",
+      "url": "https://data.eastmoney.com/notices/detail/600900/AN202602261820059019.html",
+      "source": "eastmoney_notice",
+      "name": "长江电力"
+    },
+    {
+      "code": "600900",
+      "art_code": "AN202602041819769289",
+      "title": "长江电力:长江电力2025年中期权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-02-05",
+      "url": "https://data.eastmoney.com/notices/detail/600900/AN202602041819769289.html",
+      "source": "eastmoney_notice",
+      "name": "长江电力"
+    },
+    {
+      "code": "601166",
+      "art_code": "AN202602011819066147",
+      "title": "兴业银行:兴业银行2025年半年度A股权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-02-02",
+      "url": "https://data.eastmoney.com/notices/detail/601166/AN202602011819066147.html",
+      "source": "eastmoney_notice",
+      "name": "兴业银行"
+    },
+    {
+      "code": "601166",
+      "art_code": "AN202602011819066164",
+      "title": "兴业银行:兴业银行关于根据2025年度中期利润分配方案调整A股可转换公司债券转股价格的公告",
+      "column": "其他",
+      "notice_date": "2026-02-02",
+      "url": "https://data.eastmoney.com/notices/detail/601166/AN202602011819066164.html",
+      "source": "eastmoney_notice",
+      "name": "兴业银行"
+    },
+    {
+      "code": "603288",
+      "art_code": "AN202601301818588838",
+      "title": "海天味业:关于佛山市海天调味食品股份有限公司差异化分红之法律意见书",
+      "column": "法律意见书",
+      "notice_date": "2026-01-31",
+      "url": "https://data.eastmoney.com/notices/detail/603288/AN202601301818588838.html",
+      "source": "eastmoney_notice",
+      "name": "海天味业"
+    },
+    {
+      "code": "603288",
+      "art_code": "AN202601301818588839",
+      "title": "海天味业:海天味业2025年回报股东特别分红权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-01-31",
+      "url": "https://data.eastmoney.com/notices/detail/603288/AN202601301818588839.html",
+      "source": "eastmoney_notice",
+      "name": "海天味业"
+    },
+    {
+      "code": "601166",
+      "art_code": "AN202601261818427233",
+      "title": "兴业银行:兴业银行关于实施2025年度A股中期权益分派时“兴业转债”停止转股的提示性公告",
+      "column": "其他",
+      "notice_date": "2026-01-27",
+      "url": "https://data.eastmoney.com/notices/detail/601166/AN202601261818427233.html",
+      "source": "eastmoney_notice",
+      "name": "兴业银行"
+    },
+    {
+      "code": "000568",
+      "art_code": "AN202601231818329384",
+      "title": "泸州老窖:2025年中期分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-01-24",
+      "url": "https://data.eastmoney.com/notices/detail/000568/AN202601231818329384.html",
+      "source": "eastmoney_notice",
+      "name": "泸州老窖"
+    },
+    {
+      "code": "000651",
+      "art_code": "AN202601151817055839",
+      "title": "格力电器:2025年中期权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-01-16",
+      "url": "https://data.eastmoney.com/notices/detail/000651/AN202601151817055839.html",
+      "source": "eastmoney_notice",
+      "name": "格力电器"
+    },
+    {
+      "code": "000568",
+      "art_code": "AN202601091816884241",
+      "title": "泸州老窖:2025年中期利润分配方案",
+      "column": "分配预案",
+      "notice_date": "2026-01-10",
+      "url": "https://data.eastmoney.com/notices/detail/000568/AN202601091816884241.html",
+      "source": "eastmoney_notice",
+      "name": "泸州老窖"
+    },
+    {
+      "code": "600036",
+      "art_code": "AN202601091816882616",
+      "title": "招商银行:招商银行股份有限公司2025年半年度A股分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-01-10",
+      "url": "https://data.eastmoney.com/notices/detail/600036/AN202601091816882616.html",
+      "source": "eastmoney_notice",
+      "name": "招商银行"
+    },
+    {
+      "code": "600919",
+      "art_code": "AN202601071816819483",
+      "title": "江苏银行:江苏银行2025年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2026-01-08",
+      "url": "https://data.eastmoney.com/notices/detail/600919/AN202601071816819483.html",
+      "source": "eastmoney_notice",
+      "name": "江苏银行"
+    },
+    {
+      "code": "600919",
+      "art_code": "AN202601041814691870",
+      "title": "江苏银行:江苏银行2025年度中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2026-01-05",
+      "url": "https://data.eastmoney.com/notices/detail/600919/AN202601041814691870.html",
+      "source": "eastmoney_notice",
+      "name": "江苏银行"
+    },
+    {
+      "code": "600900",
+      "art_code": "AN202512301811357349",
+      "title": "长江电力:长江电力2025年中期利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2025-12-31",
+      "url": "https://data.eastmoney.com/notices/detail/600900/AN202512301811357349.html",
+      "source": "eastmoney_notice",
+      "name": "长江电力"
+    },
+    {
+      "code": "600036",
+      "art_code": "AN202512291810659464",
+      "title": "招商银行:招商银行股份有限公司2025年半年度利润分配方案公告",
+      "column": "分配预案",
+      "notice_date": "2025-12-30",
+      "url": "https://data.eastmoney.com/notices/detail/600036/AN202512291810659464.html",
+      "source": "eastmoney_notice",
+      "name": "招商银行"
+    },
+    {
+      "code": "600519",
+      "art_code": "AN202512241807265827",
+      "title": "贵州茅台:贵州茅台关于实施2025年中期权益分派后调整回购股份价格上限的公告",
+      "column": "回购方案修订",
+      "notice_date": "2025-12-25",
+      "url": "https://data.eastmoney.com/notices/detail/600519/AN202512241807265827.html",
+      "source": "eastmoney_notice",
+      "name": "贵州茅台"
+    },
+    {
+      "code": "603288",
+      "art_code": "AN202512181803102003",
+      "title": "海天味业:海天味业2025年回报股东特别分红预案公告",
+      "column": "分配预案",
+      "notice_date": "2025-12-19",
+      "url": "https://data.eastmoney.com/notices/detail/603288/AN202512181803102003.html",
+      "source": "eastmoney_notice",
+      "name": "海天味业"
+    },
+    {
+      "code": "601298",
+      "art_code": "AN202512161801760129",
+      "title": "青岛港:青岛港国际股份有限公司2025年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-12-17",
+      "url": "https://data.eastmoney.com/notices/detail/601298/AN202512161801760129.html",
+      "source": "eastmoney_notice",
+      "name": "青岛港"
+    },
+    {
+      "code": "600132",
+      "art_code": "AN202512111798328195",
+      "title": "重庆啤酒:重庆啤酒股份有限公司2025年中期权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-12-12",
+      "url": "https://data.eastmoney.com/notices/detail/600132/AN202512111798328195.html",
+      "source": "eastmoney_notice",
+      "name": "重庆啤酒"
+    },
+    {
+      "code": "000858",
+      "art_code": "AN202512101797659481",
+      "title": "五粮液:2025年中期分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-12-11",
+      "url": "https://data.eastmoney.com/notices/detail/000858/AN202512101797659481.html",
+      "source": "eastmoney_notice",
+      "name": "五粮液"
+    },
+    {
+      "code": "600519",
+      "art_code": "AN202512101797727984",
+      "title": "贵州茅台:贵州茅台2025年中期权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-12-11",
+      "url": "https://data.eastmoney.com/notices/detail/600519/AN202512101797727984.html",
+      "source": "eastmoney_notice",
+      "name": "贵州茅台"
+    },
+    {
+      "code": "002142",
+      "art_code": "AN202512091796998290",
+      "title": "宁波银行:宁波银行股份有限公司2025年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-12-10",
+      "url": "https://data.eastmoney.com/notices/detail/002142/AN202512091796998290.html",
+      "source": "eastmoney_notice",
+      "name": "宁波银行"
+    },
+    {
+      "code": "600887",
+      "art_code": "AN202512081796416438",
+      "title": "伊利股份:内蒙古伊利实业集团股份有限公司2025年中期权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-12-09",
+      "url": "https://data.eastmoney.com/notices/detail/600887/AN202512081796416438.html",
+      "source": "eastmoney_notice",
+      "name": "伊利股份"
+    },
+    {
+      "code": "601288",
+      "art_code": "AN202512081796359379",
+      "title": "农业银行:农业银行2025年半年度A股分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-12-09",
+      "url": "https://data.eastmoney.com/notices/detail/601288/AN202512081796359379.html",
+      "source": "eastmoney_notice",
+      "name": "农业银行"
+    },
+    {
+      "code": "601398",
+      "art_code": "AN202512081796356748",
+      "title": "工商银行:工商银行A股2025年半年度分红派息实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-12-09",
+      "url": "https://data.eastmoney.com/notices/detail/601398/AN202512081796356748.html",
+      "source": "eastmoney_notice",
+      "name": "工商银行"
+    },
+    {
+      "code": "600132",
+      "art_code": "AN202511121780019114",
+      "title": "重庆啤酒:重庆啤酒股份有限公司关于2025年度中期利润分配方案的公告",
+      "column": "分配预案",
+      "notice_date": "2025-11-13",
+      "url": "https://data.eastmoney.com/notices/detail/600132/AN202511121780019114.html",
+      "source": "eastmoney_notice",
+      "name": "重庆啤酒"
+    },
+    {
+      "code": "600519",
+      "art_code": "AN202511051775759374",
+      "title": "贵州茅台:贵州茅台关于2025年中期利润分配方案暨贯彻落实“提质增效重回报”专项行动方案的公告",
+      "column": "分配预案",
+      "notice_date": "2025-11-06",
+      "url": "https://data.eastmoney.com/notices/detail/600519/AN202511051775759374.html",
+      "source": "eastmoney_notice",
+      "name": "贵州茅台"
+    },
+    {
+      "code": "600690",
+      "art_code": "AN202510311772596214",
+      "title": "海尔智家:北京市中伦律师事务所关于海尔智家股份有限公司差异化分红事项之专项法律意见书",
+      "column": "法律意见书",
+      "notice_date": "2025-11-01",
+      "url": "https://data.eastmoney.com/notices/detail/600690/AN202510311772596214.html",
+      "source": "eastmoney_notice",
+      "name": "海尔智家"
+    },
+    {
+      "code": "600690",
+      "art_code": "AN202510311772596215",
+      "title": "海尔智家:海尔智家股份有限公司2025年半年度A股权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-11-01",
+      "url": "https://data.eastmoney.com/notices/detail/600690/AN202510311772596215.html",
+      "source": "eastmoney_notice",
+      "name": "海尔智家"
+    },
+    {
+      "code": "000651",
+      "art_code": "AN202510301772079243",
+      "title": "格力电器:2025年中期利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2025-10-31",
+      "url": "https://data.eastmoney.com/notices/detail/000651/AN202510301772079243.html",
+      "source": "eastmoney_notice",
+      "name": "格力电器"
+    },
+    {
+      "code": "000858",
+      "art_code": "AN202510301771985101",
+      "title": "五粮液:关于2025年中期利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2025-10-31",
+      "url": "https://data.eastmoney.com/notices/detail/000858/AN202510301771985101.html",
+      "source": "eastmoney_notice",
+      "name": "五粮液"
+    },
+    {
+      "code": "600887",
+      "art_code": "AN202510301771961435",
+      "title": "伊利股份:内蒙古伊利实业集团股份有限公司关于2025年中期利润分配预案的公告",
+      "column": "分配预案",
+      "notice_date": "2025-10-31",
+      "url": "https://data.eastmoney.com/notices/detail/600887/AN202510301771961435.html",
+      "source": "eastmoney_notice",
+      "name": "伊利股份"
+    },
+    {
+      "code": "601166",
+      "art_code": "AN202510301771988169",
+      "title": "兴业银行:兴业银行2025年度中期利润分配预案公告",
+      "column": "分配预案",
+      "notice_date": "2025-10-31",
+      "url": "https://data.eastmoney.com/notices/detail/601166/AN202510301771988169.html",
+      "source": "eastmoney_notice",
+      "name": "兴业银行"
+    },
+    {
+      "code": "600690",
+      "art_code": "AN202510231767593608",
+      "title": "海尔智家:海尔智家股份有限公司关于2025半年度利润分配方案调整每股分配比例的公告",
+      "column": "分配方案调整",
+      "notice_date": "2025-10-24",
+      "url": "https://data.eastmoney.com/notices/detail/600690/AN202510231767593608.html",
+      "source": "eastmoney_notice",
+      "name": "海尔智家"
+    },
+    {
+      "code": "601006",
+      "art_code": "AN202510161763278649",
+      "title": "大秦铁路:大秦铁路股份有限公司2025年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-10-17",
+      "url": "https://data.eastmoney.com/notices/detail/601006/AN202510161763278649.html",
+      "source": "eastmoney_notice",
+      "name": "大秦铁路"
+    },
+    {
+      "code": "601318",
+      "art_code": "AN202510161763271654",
+      "title": "中国平安:中国平安2025年半年度权益分派实施公告",
+      "column": "分配方案实施",
+      "notice_date": "2025-10-17",
+      "url": "https://data.eastmoney.com/notices/detail/601318/AN202510161763271654.html",
+      "source": "eastmoney_notice",
+      "name": "中国平安"
+    }
+  ]
+}

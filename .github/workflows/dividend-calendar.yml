@@ -1,0 +1,162 @@
+name: 分红日历订阅
+
+# 每天抓一次蓝筹 / 高股息股票的**分红公告**与**分红方案**，
+# 生成**日历订阅（ICS）**写回仓库，订阅方用 GitHub raw 直接读：
+#
+#   https://raw.githubusercontent.com/bigegao/wealth-nav-watch/main/calendar/dividend-calendar.ics
+#
+# ## 为什么放在这个仓库跑
+#
+# 1. **要跑得久、要抓得多**。50 只股票 × (1 页方案 + 2~3 页公告) 是上百次请求；
+#    有子请求上限的运行时（比如 Cloudflare Workers 免费版每次调用只有 50 次）装不下。
+#    GitHub Actions 一次跑完没有这个限制（实测全量 50 只约 10 秒）。
+# 2. **产物要能被订阅**。日历订阅需要一个**稳定 URL**，
+#    「提交进仓库 → raw 读取」是最省事的做法：不依赖任何服务器，
+#    也不会因为某天服务挂了而订阅中断。
+# 3. **职责单一好排查**。抓取只在这里做 —— 两个地方都抓，
+#    出问题时你分不清数据是哪条路来的。
+#
+# ## 什么时候跑
+#
+# 每天一次，**北京时间 09:00**（cron 的 `01:00 UTC`）。
+#
+# 为什么是早上：A股公告大多在**收盘后到晚上**（实测发布时刻在 17:00 前后），
+# 而东方财富给这类公告标的**披露日是次日**（实测 11-02 17:11 发布的公告，
+# 披露日标成 11-03）。所以早上跑这一轮，正好把「昨晚发的那批」收进来；
+# 当天白天发的公告要等第二天那轮。
+#
+# ⚠️ GitHub 的 schedule 会延迟（实测延迟过 7 小时），
+# 所以「文件是哪天生成的」和「数据属于哪天」必须分开记 —— 靠数据里的日期。
+#
+# ## 产物是幂等的
+#
+# 脚本不写「生成时间」，DTSTAMP 取自数据本身，
+# 所以**数据没变 → 产物字节级不变 → 这一步不会产生提交**。
+# 仓库里不会出现「每天一条没有信息量的提交」。
+
+on:
+  schedule:
+    # UTC 01:00 = **北京时间 09:00**
+    - cron: '0 1 * * *'
+  # 手动补跑 / 临时调窗口
+  workflow_dispatch:
+    inputs:
+      history_days:
+        description: '分红事件的历史回看天数（默认 180；0 = 只留未来的）'
+        required: false
+        default: '180'
+      announcement_days:
+        description: '公告事件在日历里保留的天数（默认 60）'
+        required: false
+        default: '60'
+      plan_window_days:
+        description: '分红方案写进产物的窗口天数（默认 400；0 = 全量历史）'
+        required: false
+        default: '400'
+      target_branch:
+        description: '提交到哪个分支（留空 = 当前分支）'
+        required: false
+        default: ''
+  # 推到 main 也跑一次 —— 改完脚本想立刻验证时很方便。
+  #
+  # 不会形成循环：workflow 自己推数据用的是 GITHUB_TOKEN，
+  # 而 GitHub 明确「用 GITHUB_TOKEN 触发的事件不会产生新的 workflow run」。
+  push:
+    branches:
+      - main
+      - feat/dividend-calendar-feed
+
+permissions:
+  contents: write
+
+# 同一时间只跑一个 —— 上一次没跑完就排队，不打断。
+concurrency:
+  group: dividend-calendar
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: 抓分红公告并更新日历订阅
+    runs-on: ubuntu-latest
+    # 实测全量 50 只约 10 秒；留足余量给跨境抖动和重试
+    timeout-minutes: 20
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      # 先跑自测：日历订阅的错误在抓取阶段**看不出来**
+      #（一行超 75 字节、UID 变了、转义顺序写反了 —— 数据照样抓到，
+      #  但用户的日历里会多出重复事件）。
+      # 抓之前就知道规则层没坏，比抓完了才发现强。
+      - name: 自测（不联网）
+        run: node scripts/fetch-dividend-calendar.mjs --selftest
+
+      - name: 抓取并生成产物
+        env:
+          HISTORY_DAYS: ${{ inputs.history_days || '180' }}
+          ANNOUNCEMENT_DAYS: ${{ inputs.announcement_days || '60' }}
+          PLAN_WINDOW_DAYS: ${{ inputs.plan_window_days || '400' }}
+        run: |
+          set -uo pipefail
+          for i in 1 2 3; do
+            echo "=== 抓取尝试 ${i}/3 ==="
+            if node scripts/fetch-dividend-calendar.mjs \
+                 --history-days "$HISTORY_DAYS" \
+                 --announcement-days "$ANNOUNCEMENT_DAYS" \
+                 --plan-window-days "$PLAN_WINDOW_DAYS"; then
+              echo "抓取成功。"
+              exit 0
+            fi
+            echo "第 ${i} 次抓取失败，30 秒后重试…"
+            sleep 30
+          done
+          echo "::error::连续 3 次抓取失败。"
+          exit 1
+
+      - name: 提交产物
+        env:
+          # 用 GITHUB_TOKEN 推送的 commit **不会**再触发一轮 workflow，
+          # 所以不会出现「提交 → 触发 → 提交」的循环。
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # 留空 = 当前分支（schedule 触发时就是默认分支 main）
+          TARGET_BRANCH: ${{ inputs.target_branch || github.ref_name }}
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add calendar/
+          if git diff --cached --quiet; then
+            echo "数据没变，仓库保持不变。"
+            exit 0
+          fi
+
+          today="$(TZ=Asia/Shanghai date +%F)"
+          git commit -m "data: ${today} 分红公告与日历订阅"
+
+          # 认证走 `-c`：**不落盘**到 .git/config。
+          # （checkout 用了 persist-credentials: false，所以这里要自己带上凭据）
+          auth_header="AUTHORIZATION: basic $(printf 'x-access-token:%s' "$GITHUB_TOKEN" | base64 -w0)"
+
+          for i in 1 2 3; do
+            if git -c "http.https://github.com/.extraheader=${auth_header}" push origin "HEAD:$TARGET_BRANCH"; then
+              echo "已推送到 ${TARGET_BRANCH}。"
+              exit 0
+            fi
+            echo "推送失败（第 ${i} 次），拉取后重试…"
+            if ! git -c "http.https://github.com/.extraheader=${auth_header}" pull --rebase origin "$TARGET_BRANCH"; then
+              git rebase --abort || true
+              echo "::error::拉取失败，放弃重试。"
+              exit 1
+            fi
+            sleep $((i * 5))
+          done
+          echo "::error::推送失败，请手动检查。"
+          exit 1

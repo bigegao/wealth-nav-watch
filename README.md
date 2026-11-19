@@ -299,9 +299,7 @@ iOS/macOS 的「日历」App、Apple 日历、Google 日历、Outlook 都能读 
 
 清单在 `config/dividend-watchlist.json`（50 只，口径：沪深主板为主的高股息 /
 现金流稳定的蓝筹，兼顾银行、能源、交通、消费、医药）。
-清单本身来自 [`lanxyou/stock-tracer`](https://github.com/lanxyou/stock-tracer)
-的 `shared/data/default-watchlist.ts` —— 搬过来是因为**抓取放数据仓**，
-改口径时两边要一起改。
+要加票改这个文件就行，脚本不用动。
 
 ### 口径
 

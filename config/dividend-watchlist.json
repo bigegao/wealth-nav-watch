@@ -1,6 +1,5 @@
 {
-  "_comment": "蓝筹 / 高股息关注清单。清单本身来自 lanxyou/stock-tracer 的 shared/data/default-watchlist.ts（DEFAULT_WATCHLIST），搬到这里是因为抓取要放在数据仓（见 README「为什么抓取放这个仓库」）。改口径时两边要一起改。",
-  "_source": "https://github.com/lanxyou/stock-tracer/blob/main/shared/data/default-watchlist.ts",
+  "_comment": "蓝筹 / 高股息关注清单。口径：沪深主板为主的高股息 / 现金流稳定的蓝筹，兼顾银行、能源、交通、消费、医药。要加票改这个文件就行，脚本不用动。",
   "updated": "2026-11-19",
   "stocks": [
     { "code": "600660", "name": "福耀玻璃" },

@@ -209,14 +209,14 @@ function testDates() {
 function testAnchor() {
   console.log('-- 落点日期 --');
   eq(
-    '优先除权除息日',
+    '优先股权登记日（分红的资格截止日）',
     planAnchor({ ex_date: '2026-09-24', record_date: '2026-09-23' }),
-    { date: '2026-09-24', anchor: 'ex', label: '除权除息日' },
+    { date: '2026-09-23', anchor: 'record', label: '股权登记日' },
   );
   eq(
-    '没有除权日就退到登记日',
-    planAnchor({ ex_date: null, record_date: '2026-09-23' }),
-    { date: '2026-09-23', anchor: 'record', label: '股权登记日' },
+    '没有登记日就退到除权除息日',
+    planAnchor({ ex_date: '2026-09-24', record_date: null }),
+    { date: '2026-09-24', anchor: 'ex', label: '除权除息日' },
   );
   eq('两个都没有 → null（只有报告期不进日历）', planAnchor({ ex_date: null, record_date: null }).date, null);
 
@@ -296,8 +296,8 @@ function testEvents() {
   };
 
   const event = planToEvent(plan, notice, '福耀玻璃');
-  eq('落点 = 除权除息日', event.date, '2026-09-24');
-  eq('标题', event.summary, '福耀玻璃 除权除息日');
+  eq('落点 = 股权登记日', event.date, '2026-09-23');
+  eq('标题', event.summary, '福耀玻璃 股权登记日');
   eq('分类', event.category, '分红');
   ok('说明里有登记日', event.description.includes('股权登记日 2026-09-23'));
   ok('说明里有除权日', event.description.includes('除权除息日 2026-09-24'));

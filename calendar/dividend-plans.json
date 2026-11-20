@@ -523,24 +523,6 @@
       "notice_url": "https://data.eastmoney.com/notices/detail/000001/AN202606041823255245.html"
     },
     {
-      "code": "000001",
-      "name": "平安银行",
-      "report_date": "2025-06-30",
-      "plan_notice_date": "2025-08-23",
-      "notice_date": "2025-09-30",
-      "record_date": "2025-10-14",
-      "ex_date": "2025-10-15",
-      "pretax_per10": 2.36,
-      "bonus_per10": null,
-      "transfer_per10": null,
-      "bonus_it_per10": null,
-      "progress": "实施分配",
-      "profile": "10派2.36元(含税,扣税后2.124元)",
-      "source": "eastmoney",
-      "notice_title": null,
-      "notice_url": null
-    },
-    {
       "code": "601166",
       "name": "兴业银行",
       "report_date": "2026-06-30",

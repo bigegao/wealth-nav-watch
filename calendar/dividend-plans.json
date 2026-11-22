@@ -379,24 +379,6 @@
       "notice_url": "https://data.eastmoney.com/notices/detail/000999/AN202605201822499096.html"
     },
     {
-      "code": "000999",
-      "name": "华润三九",
-      "report_date": "2025-06-30",
-      "plan_notice_date": "2025-08-16",
-      "notice_date": "2025-10-10",
-      "record_date": "2025-10-16",
-      "ex_date": "2025-10-17",
-      "pretax_per10": 4.5,
-      "bonus_per10": null,
-      "transfer_per10": null,
-      "bonus_it_per10": null,
-      "progress": "实施分配",
-      "profile": "10派4.50元(含税,扣税后4.05元)",
-      "source": "eastmoney",
-      "notice_title": null,
-      "notice_url": null
-    },
-    {
       "code": "601288",
       "name": "农业银行",
       "report_date": "2026-06-30",
@@ -631,24 +613,6 @@
       "notice_url": null
     },
     {
-      "code": "002027",
-      "name": "分众传媒",
-      "report_date": "2025-06-30",
-      "plan_notice_date": "2025-08-30",
-      "notice_date": "2025-10-11",
-      "record_date": "2025-10-16",
-      "ex_date": "2025-10-17",
-      "pretax_per10": 1,
-      "bonus_per10": null,
-      "transfer_per10": null,
-      "bonus_it_per10": null,
-      "progress": "实施分配",
-      "profile": "10派1.00元(含税,扣税后0.90元)",
-      "source": "eastmoney",
-      "notice_title": null,
-      "notice_url": null
-    },
-    {
       "code": "600066",
       "name": "宇通客车",
       "report_date": "2025-12-31",
@@ -753,8 +717,8 @@
       "progress": "实施分配",
       "profile": "10派0.80元(含税,扣税后0.72元)",
       "source": "eastmoney",
-      "notice_title": "大秦铁路:大秦铁路股份有限公司2025年半年度权益分派实施公告",
-      "notice_url": "https://data.eastmoney.com/notices/detail/601006/AN202510161763278649.html"
+      "notice_title": null,
+      "notice_url": null
     },
     {
       "code": "600398",
@@ -1081,24 +1045,6 @@
       "notice_url": null
     },
     {
-      "code": "600938",
-      "name": "中国海油",
-      "report_date": "2025-06-30",
-      "plan_notice_date": "2025-08-28",
-      "notice_date": "2025-10-10",
-      "record_date": "2025-10-16",
-      "ex_date": "2025-10-17",
-      "pretax_per10": 6.6612,
-      "bonus_per10": null,
-      "transfer_per10": null,
-      "bonus_it_per10": null,
-      "progress": "实施分配",
-      "profile": "10派6.6612元(含税,扣税后5.9951元)",
-      "source": "eastmoney",
-      "notice_title": null,
-      "notice_url": null
-    },
-    {
       "code": "000858",
       "name": "五粮液",
       "report_date": "2025-12-31",
@@ -1293,8 +1239,8 @@
       "progress": "实施分配",
       "profile": "10派9.50元(含税,扣税后8.55元)",
       "source": "eastmoney",
-      "notice_title": "中国平安:中国平安2025年半年度权益分派实施公告",
-      "notice_url": "https://data.eastmoney.com/notices/detail/601318/AN202510161763271654.html"
+      "notice_title": null,
+      "notice_url": null
     },
     {
       "code": "600887",

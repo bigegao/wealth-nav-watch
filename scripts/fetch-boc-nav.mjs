@@ -39,7 +39,7 @@
  * 零第三方依赖（只用 Node 自带的 fetch），Node 18+ 可跑。
  */
 
-import { readFile, readdir, writeFile, mkdir } from 'node:fs/promises';
+import { readFile, readdir, writeFile, mkdir, appendFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import dns from 'node:dns/promises';
@@ -49,6 +49,19 @@ import http from 'node:http';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const REPO = path.resolve(HERE, '..');
 const DATA_DIR = path.join(REPO, 'data');
+
+/**
+ * 快照清单目录。
+ *
+ * 每一轮抓取都往 `snapshots/YYYY-MM.jsonl` 追加一行，
+ * 记下「这一轮什么时候跑的、扫了多少页、看到多少组合、新增多少」。
+ *
+ * 为什么需要它：仓库里**只存新增的行**，
+ * 所以「某一轮跑了但什么都没新增」这件事在数据文件里是看不见的。
+ * 而判断某档净值是「产品没披露」还是「我们没拍到」，
+ * 唯一的证据就是「那段时间里到底跑过几轮」—— 证据只能存在这里。
+ */
+const SNAPSHOT_DIR = path.join(REPO, 'snapshots');
 
 const BASE = 'https://www.boc.cn/sourcedb';
 
@@ -117,7 +130,23 @@ const COLUMNS = [
   'yield7d_pct', // 七日年收益率 %（货币基金口径）
   'source_dir', // 来源静态页
   'data_date', // 数据日（北京时间）= **抓取日的前一天**（见下方「日期规范」）
+  'snapshot_at', // **这一档是被哪一次快照拍到的**（北京时间 ISO8601）
 ];
+
+/**
+ * 参与去重键的列数 —— **前 10 列**。
+ *
+ * 为什么单独记一个数：`snapshot_at` 是后加的第 11 列，
+ * 而 2026-11-26 之前的所有 CSV 都只有 10 列。
+ * 如果按 `COLUMNS.length`（现在 = 11）去筛行数，
+ * 那些老文件会被整份跳过 → 已知键集合塌成空 →
+ * 所有历史组合都被当成「新增」重写一遍。
+ *
+ * 所以：**老文件按 10 列读，新文件按 11 列写**，
+ * 缺的那一列补空串。去重键只用前 10 列（见 csvRowKey），
+ * 与加列之前完全一致 —— 加列不改变「什么算重复」。
+ */
+const BASE_COLUMN_COUNT = 10;
 
 // ---------------------------------------------------------------- 参数
 
@@ -229,6 +258,17 @@ function beijingDate(d = new Date()) {
 function beijingDateOffset(days, from = new Date()) {
   const shifted = new Date(from.getTime() + (8 * 60 + days * 24 * 60) * 60 * 1000);
   return shifted.toISOString().slice(0, 10);
+}
+
+/**
+ * 北京时间的 ISO8601（带 +08:00 偏移），例：`2026-11-26T13:04:05+08:00`。
+ *
+ * 为什么带偏移而不是不带：中行、仓库、GitHub 看的是三个不同的时区，
+ * 一个不带时区的时间戳没法比先后。
+ */
+function beijingNow(from = new Date()) {
+  const shifted = new Date(from.getTime() + 8 * 60 * 60 * 1000);
+  return `${shifted.toISOString().slice(0, 19)}+08:00`;
 }
 
 // ---------------------------------------------------------------- CSV
@@ -629,7 +669,7 @@ function makeKey(code, navDate, sourceDir) {
   return [sourceDir, code, navDate].join('\u0001');
 }
 
-/** 从一行 CSV（10 列）算键 */
+/** 从一行 CSV 算键 —— 只用前 {@link BASE_COLUMN_COUNT} 列（加列不改变去重口径） */
 function csvRowKey(row) {
   return makeKey(row[0] ?? '', row[2] ?? '', row[8] ?? '');
 }
@@ -648,22 +688,66 @@ async function loadKnownKeys() {
     const rows = parseCsv(text);
     for (let i = 1; i < rows.length; i += 1) {
       const row = rows[i];
-      if (row.length < COLUMNS.length) continue;
+      // 判 10 列而不是 COLUMNS.length：老文件只有 10 列，不能整份跳过
+      if (row.length < BASE_COLUMN_COUNT) continue;
       keys.add(csvRowKey(row));
     }
   }
   return keys;
 }
 
-/** 读当天的文件（如果 workflow 重跑过），用来合并而不是覆盖 */
+/**
+ * 读当天的文件（如果 workflow 重跑过），用来合并而不是覆盖。
+ *
+ * 老文件（10 列）会被补齐到 11 列 —— 补的是空的 `snapshot_at`，
+ * 因为那批数据当时确实没有记录是哪一次快照拍到的。
+ */
 async function loadExistingRows(file) {
   try {
     const text = await readFile(file, 'utf8');
     const rows = parseCsv(text);
-    return rows.slice(1).filter((r) => r.length >= COLUMNS.length);
+    return rows
+      .slice(1)
+      .filter((r) => r.length >= BASE_COLUMN_COUNT)
+      .map((r) => (r.length >= COLUMNS.length ? r : [...r, ...Array(COLUMNS.length - r.length).fill('')]));
   } catch {
     return [];
   }
+}
+
+/**
+ * 往 `snapshots/YYYY-MM.jsonl` 追加一行「这一轮快照」的记录。
+ *
+ * 按月一个文件、一轮一行 —— 一年 12 个文件、每天几行，
+ * git diff 里能直接看到「快照密度」的变化，又不至于把仓库塞满小文件。
+ *
+ * 记的是**这一轮看到了什么**，不是「新增了什么」：
+ * 新增的行在 CSV 里，**没新增这件事只有这里有**。
+ */
+async function writeSnapshotManifest(entry) {
+  await mkdir(SNAPSHOT_DIR, { recursive: true });
+  const month = entry.snapshotAt.slice(0, 7); // 2026-11
+  const file = path.join(SNAPSHOT_DIR, `${month}.jsonl`);
+  const line = JSON.stringify({
+    snapshot_at: entry.snapshotAt,
+    data_date: entry.dataDate,
+    mode: entry.mode,
+    dirs: entry.dirs,
+    known: entry.knownCombos,
+    seen: entry.seenCombos,
+    new: entry.newRows,
+    stale_skipped: entry.staleSkipped,
+    sources: entry.sources.map((s) => ({
+      dir: s.dir,
+      pages: s.pages_scanned,
+      rows: s.rows_seen,
+      stop: s.stop_reason,
+      stop_page: s.stop_page,
+      seconds: s.seconds,
+    })),
+  });
+  await appendFile(file, `${line}\n`, 'utf8');
+  console.log(`→ ${path.relative(REPO, file)}（记了这一轮快照）`);
 }
 
 // ---------------------------------------------------------------- 主流程
@@ -681,7 +765,14 @@ async function main(argv) {
   // 否则同一个「2026-11-12.csv」在不同批次下含义会漂。
   const dataDate = opts.date || beijingDateOffset(-1);
 
+  // 这一轮快照的时刻 —— 写进每一行的 `snapshot_at`，也写进快照清单。
+  //
+  // 取的是**开始抓的时候**，不是结束的时候：一轮要跑 1~3 分钟，
+  // 中途中行可能就刷了新批次，用开始时刻才不会把两轮的时间算串。
+  const snapshotAt = beijingNow();
+
   console.log(`数据日（北京时间）：${dataDate}（抓取日 ${beijingDate()} 的前一天）`);
+  console.log(`快照时刻：${snapshotAt}`);
   console.log(`来源：${opts.dirs.join('、')}（每个源最多 ${opts.pages} 页）`);
 
   // 陈旧截止日：净值日期比它还早的 = 一两个月没变化，不抓、不写。
@@ -699,6 +790,7 @@ async function main(argv) {
 
   const all = [];
   let staleSeen = 0;
+  const sources = [];
   for (const dir of opts.dirs) {
     const started = Date.now();
     const fetched = await fetchSource(dir, opts.pages, { cutoff });
@@ -717,6 +809,14 @@ async function main(argv) {
     const keep = cutoff ? fetched.rows.filter((r) => !isStale(r.nav_date, cutoff)) : fetched.rows;
     staleSeen += fetched.rows.length - keep.length;
     all.push(...keep.map((r) => ({ ...r, source_dir: dir })));
+    sources.push({
+      dir,
+      pages_scanned: fetched.scanned,
+      rows_seen: fetched.rows.length,
+      stop_reason: fetched.stopReason,
+      stop_page: fetched.stopPage,
+      seconds: Number(secs),
+    });
   }
   if (staleSeen > 0) console.log(`陈旧跳过 ${staleSeen} 行（不进增量）`);
 
@@ -765,9 +865,26 @@ async function main(argv) {
       row.yield7d_pct,
       row.source_dir,
       dataDate,
+      snapshotAt,
     ];
     merged.set(csvRowKey(csvRow), csvRow);
   }
+
+  // 快照清单：这一轮跑过了就是跑过了 —— 哪怕它什么都没新增。
+  // 写在最前面，因为它比数据文件更重要：**数据文件只记新增，
+  // 「这一轮跑了但没有新增」在数据文件里是看不见的**，
+  // 而判断某档净值是「没披露」还是「没拍到」，证据就在这里。
+  await writeSnapshotManifest({
+    snapshotAt,
+    dataDate,
+    mode: opts.staleDays > 0 ? 'early-stop' : 'full',
+    dirs: opts.dirs,
+    knownCombos: known.size,
+    seenCombos: seen.size,
+    newRows: fresh.length,
+    staleSkipped: staleSeen,
+    sources,
+  });
 
   // 没有新增、而且当天也没有既存文件 → **不写文件**。
   // 否则仓库里会多出一个只有表头的空 CSV（每天一个，纯噪音）。
